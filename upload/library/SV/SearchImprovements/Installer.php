@@ -11,17 +11,39 @@ class SV_SearchImprovements_Installer
             throw new Exception("Require Enhanced Search to be installed and enabled");
         }
 
-        // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
-        $mappings = $XenEs->getOptimizableMappings();
-        if ($mappings)
+        $requireIndexing = array();
+        if ($version == 0)
         {
-            XenForo_Error::debug(var_export($mappings, true));
-            XenForo_Error::logException(new Exception("Please optimize mappings, and re-index all content types."));
+            $requireIndexing['post'] = true;
         }
+        
+        $db = XenForo_Application::getDb();
+        
+        $db->query("
+            CREATE TABLE IF NOT EXISTS `xf_post_words`
+            (
+                `post_id` int(10) unsigned NOT NULL,
+                `word_count` int(10) unsigned NOT NULL,
+                PRIMARY KEY (`post_id`)
+            ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci
+        ");
+
+        // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
+        SV_Utils_Install::updateXenEsMapping($requireIndexing, array(
+            'post' => array(
+                "properties" => array(
+                    "word_count" => array("type" => "long", "store" => "yes"),
+                )
+            )
+        ));
     }
 
     public static function uninstall()
     {
         $db = XenForo_Application::getDb();
+
+        $db->query("
+            DROP TABLE IF EXISTS `xf_post_words`
+        ");
     }
 }
