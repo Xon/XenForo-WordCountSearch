@@ -16,9 +16,9 @@ class SV_SearchImprovements_Installer
         {
             $requireIndexing['post'] = true;
         }
-        
+
         $db = XenForo_Application::getDb();
-        
+
         $db->query("
             CREATE TABLE IF NOT EXISTS `xf_post_words`
             (

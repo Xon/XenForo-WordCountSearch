@@ -6,7 +6,7 @@ class SV_SearchImprovements_XenForo_Search_DataHandler_Post extends XFCP_SV_Sear
     {
         if (!isset($data[SV_SearchImprovements_Globals::WordCountField]))
         {
-            $wordcount = $this->_getPostModel()->getTextWordCount($data['message']);
+            $wordcount = $this->_getSearchModel()->getTextWordCount($data['message']);
             $db = XenForo_Application::getDb();
             $db->query("
                 insert ignore into xf_post_words (post_id, word_count) values (?,?)
@@ -25,7 +25,7 @@ class SV_SearchImprovements_XenForo_Search_DataHandler_Post extends XFCP_SV_Sear
         {
             $indexer = new SV_SearchImprovements_Search_IndexerProxy($indexer, $metadata);
         }
-        
+
 
         parent::_insertIntoIndex($indexer, $data, $parentData);
     }
@@ -34,5 +34,16 @@ class SV_SearchImprovements_XenForo_Search_DataHandler_Post extends XFCP_SV_Sear
     {
         $indexer = new SV_SearchImprovements_Search_IndexerProxy($indexer, array());
         return parent::quickIndex($indexer, $contentIds);
+    }
+
+    protected $_searchModel = null;
+    protected function _getSearchModel()
+    {
+        if (!$this->_searchModel)
+        {
+            $this->_searchModel = XenForo_Model::create('XenForo_Model_Search');
+        }
+
+        return $this->_searchModel;
     }
 }
