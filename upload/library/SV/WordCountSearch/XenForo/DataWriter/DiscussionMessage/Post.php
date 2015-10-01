@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_SV_SearchImprovements_XenForo_DataWriter_DiscussionMessage_Post
+class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post
 {
     protected function _getFields()
     {

@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_Installer
+class SV_WordCountSearch_Installer
 {
     public static function install($installedAddon, array $addonData, SimpleXMLElement $xml)
     {

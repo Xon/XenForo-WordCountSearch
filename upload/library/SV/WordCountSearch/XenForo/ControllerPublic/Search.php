@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_XenForo_ControllerPublic_Search extends XFCP_SV_SearchImprovements_XenForo_ControllerPublic_Search
+class SV_WordCountSearch_XenForo_ControllerPublic_Search extends XFCP_SV_WordCountSearch_XenForo_ControllerPublic_Search
 {
     public function actionIndex()
     {
@@ -27,7 +27,7 @@ class SV_SearchImprovements_XenForo_ControllerPublic_Search extends XFCP_SV_Sear
 
     public function actionSearch()
     {
-        SV_SearchImprovements_Globals::$SearchController = $this;
+        SV_WordCountSearch_Globals::$SearchController = $this;
         return parent::actionSearch();
     }
 }

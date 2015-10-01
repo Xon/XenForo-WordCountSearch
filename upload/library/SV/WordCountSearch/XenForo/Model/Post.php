@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_XenForo_Model_Post extends XFCP_SV_SearchImprovements_XenForo_Model_Post
+class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenForo_Model_Post
 {
     public function preparePostJoinOptions(array $fetchOptions)
     {

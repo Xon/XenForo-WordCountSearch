@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_Search_IndexerProxy extends XenForo_Search_Indexer
+class SV_WordCountSearch_Search_IndexerProxy extends XenForo_Search_Indexer
 {
     protected $_proxiedIndexer = null;
     protected $_metadata = array();

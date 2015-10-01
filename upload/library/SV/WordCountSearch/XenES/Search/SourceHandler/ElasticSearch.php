@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch extends XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch
+class SV_WordCountSearch_XenES_Search_SourceHandler_ElasticSearch extends XFCP_SV_WordCountSearch_XenES_Search_SourceHandler_ElasticSearch
 {
     public function processConstraints(array $constraints, XenForo_Search_DataHandler_Abstract $typeHandler = null)
     {

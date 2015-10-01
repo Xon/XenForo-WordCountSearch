@@ -1,6 +1,6 @@
 <?php
 
-class SV_SearchImprovements_XenForo_Model_Search extends XFCP_SV_SearchImprovements_XenForo_Model_Search
+class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_XenForo_Model_Search
 {
     function str_word_count_utf8($str)
     {
@@ -37,12 +37,12 @@ class SV_SearchImprovements_XenForo_Model_Search extends XFCP_SV_SearchImproveme
     {
         $constraints = parent::getGeneralConstraintsFromInput($input, $errors);
 
-        if (empty(SV_SearchImprovements_Globals::$SearchController))
+        if (empty(SV_WordCountSearch_Globals::$SearchController))
         {
             return $constraints;
         }
 
-        $input2 = SV_SearchImprovements_Globals::$SearchController->getInput()->filter(array(
+        $input2 = SV_WordCountSearch_Globals::$SearchController->getInput()->filter(array(
             'word_count' => XenForo_Input::ARRAY_SIMPLE,
         ));
 

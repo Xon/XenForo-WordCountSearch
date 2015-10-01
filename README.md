@@ -1,7 +1,8 @@
-# XenForo-ReportImprovements
+# XenForo-WordCountSearch
 
-A Collection of improvements to XF's enhanced search (Elasticsearch). Does NOT work with MySQL search.
+Does NOT work with MySQL search, requires XF's enhanced search (Elasticsearch)
 
-- range_query search DSL
- - allows arbitary range queries for numerical data
-- Word counts.
+Adds the ability to-do word-count range searches .
+
+Works with the following Content Types:
+- Posts.
