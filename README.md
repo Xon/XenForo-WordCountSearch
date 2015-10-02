@@ -1,8 +1,8 @@
 # XenForo-WordCountSearch
 
-Does NOT work with MySQL search, requires XF's enhanced search (Elasticsearch)
+Does NOT work with MySQL search, requires XF's enhanced search (Elasticsearch). Requires https://github.com/Xon/XenForo-SearchImprovements
 
-Adds the ability to-do word-count range searches .
+Adds the ability to-do word-count range searches.
 
 Works with the following Content Types:
 - Posts.
