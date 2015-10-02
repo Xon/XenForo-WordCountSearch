@@ -6,7 +6,5 @@ class SV_WordCountSearch_Globals
 {
     const WordCountField = 'word_count';
 
-    public static $SearchController = null;
-
     private function __construct() {}
 }

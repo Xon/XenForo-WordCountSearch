@@ -37,12 +37,12 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
     {
         $constraints = parent::getGeneralConstraintsFromInput($input, $errors);
 
-        if (empty(SV_WordCountSearch_Globals::$SearchController))
+        if (empty(SV_SearchImprovements_Globals::$SearchController))
         {
             return $constraints;
         }
 
-        $input2 = SV_WordCountSearch_Globals::$SearchController->getInput()->filter(array(
+        $input2 = SV_SearchImprovements_Globals::$SearchController->getInput()->filter(array(
             'word_count' => XenForo_Input::ARRAY_SIMPLE,
         ));
 

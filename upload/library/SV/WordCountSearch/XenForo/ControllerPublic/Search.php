@@ -24,10 +24,4 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Search extends XFCP_SV_WordCou
 
         return $response;
     }
-
-    public function actionSearch()
-    {
-        SV_WordCountSearch_Globals::$SearchController = $this;
-        return parent::actionSearch();
-    }
 }
