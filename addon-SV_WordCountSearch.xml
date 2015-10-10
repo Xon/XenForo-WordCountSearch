@@ -35,7 +35,7 @@
     <modification template="search_form" modification_key="SV_WordCountSearch_search_form_1" description="Inject Word count filter" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<xen:if is="{$nodes}">]]></find>
       <replace><![CDATA[<dl class="ctrlUnit">
-		<dt><label for="ctrl_date">{xen:phrase word_count}:</label></dt>
+		<dt><label for="ctrl_word_count_lower">{xen:phrase word_count}:</label></dt>
 		<dd>
 			<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="word_count[lower]" value="{$search.word_count.lower}" class="textCtrl" id="ctrl_word_count_lower" /> - 
 			<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="word_count[upper]" value="{$search.word_count.upper}" class="textCtrl" id="ctrl_word_count_upper" />
