@@ -32,7 +32,7 @@ class SV_WordCountSearch_Installer
         SV_Utils_Install::updateXenEsMapping($requireIndexing, array(
             'post' => array(
                 "properties" => array(
-                    "word_count" => array("type" => "long", "store" => "yes"),
+                    "word_count" => array("type" => "long"),
                 )
             )
         ));
