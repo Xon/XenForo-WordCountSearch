@@ -33,7 +33,7 @@
   <templates/>
   <public_template_modifications>
     <modification template="search_form" modification_key="SV_WordCountSearch_search_form_1" description="Inject Word count filter" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[<xen:if is="{$nodes}">]]></find>
+      <find><![CDATA[<xen:if is="{$nodes} AND {$search.range_query}">]]></find>
       <replace><![CDATA[<dl class="ctrlUnit">
 		<dt><label for="ctrl_word_count_lower">{xen:phrase word_count}:</label></dt>
 		<dd>
