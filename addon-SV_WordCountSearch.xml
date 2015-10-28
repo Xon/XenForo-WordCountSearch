@@ -55,6 +55,13 @@ $0]]></replace>
 </xen:if>
 $0]]></replace>
     </modification>
+    <modification template="search_result_post" modification_key="SV_WordCountSearch_search_result_post_1" description="Inject Word count" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#\w*{xen:phrase post_by}#si]]></find>
+      <replace><![CDATA[<xen:if is="{$post.WordCount}">
+{xen:phrase word_count}: <a class="wordcount">{$post.WordCount}</a>,
+</xen:if>
+$0]]></replace>
+    </modification>
   </public_template_modifications>
   <bb_code_media_sites/>
   <bb_codes/>
