@@ -6,12 +6,15 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
     {
         $joinOptions = parent::preparePostJoinOptions($fetchOptions);
 
-        $joinOptions['selectFields'] .= '
-            , wordcount.word_count
-        ';
-        $joinOptions['joinTables'] .= '
-            LEFT JOIN xf_post_words wordcount ON wordcount.post_id = post.post_id
-        ';
+        if (empty($fetchOptions['skip_wordcount']))
+        {
+            $joinOptions['selectFields'] .= '
+                , wordcount.word_count
+            ';
+            $joinOptions['joinTables'] .= '
+                LEFT JOIN xf_post_words wordcount ON wordcount.post_id = post.post_id
+            ';
+        }
 
         return $joinOptions;
     }
