@@ -2,6 +2,14 @@
 
 class SV_WordCountSearch_Installer
 {
+    public static $extraMappings = array(
+            'post' => array(
+                "properties" => array(
+                    "word_count" => array("type" => "long"),
+                )
+            )
+        );
+
     public static function install($installedAddon, array $addonData, SimpleXMLElement $xml)
     {
         $version = isset($installedAddon['version_id']) ? $installedAddon['version_id'] : 0;
@@ -29,13 +37,7 @@ class SV_WordCountSearch_Installer
         ");
 
         // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
-        SV_Utils_Install::updateXenEsMapping($requireIndexing, array(
-            'post' => array(
-                "properties" => array(
-                    "word_count" => array("type" => "long"),
-                )
-            )
-        ));
+        SV_Utils_Install::updateXenEsMapping($requireIndexing, self::$extraMappings);
     }
 
     public static function uninstall()
