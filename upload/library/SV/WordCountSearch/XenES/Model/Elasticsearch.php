@@ -1,37 +1,67 @@
 <?php
 
-class SV_WordCountSearch_XenES_Model_ElasticSearch extends XFCP_SV_WordCountSearch_XenES_Model_ElasticSearch
+class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSearch_XenES_Model_Elasticsearch
 {
-	public function getOptimizableMappings(array $mappingTypes = null, $mappings = null)
-	{
-		if ($mappingTypes === null)
-		{
-			$mappingTypes = $this->getAllSearchContentTypes();
-		}
-		if ($mappings === null)
-		{
-			$mappings = $this->getMappings();
-		}
-        return $this->_getOptimizableMappings($mappingTypes, $mappings, []);
-	}
-
-	protected function _getOptimizableMappings(array $mappingTypes, $mappings, $extraMappings)
-	{
-        $extraMappings = array_merge($extraMappings, SV_WordCountSearch_Installer::$extraMappings);
-        if (is_callable('parent::_getOptimizableMappings'))
+    public function getOptimizableMappingFor($type)
+    {
+        switch($type)
         {
-            return parent::_getOptimizableMappings($mappingTypes, $mappings, $extraMappings);
+            case 'post':
+                $mapping = array(
+                    "properties" => array(
+                        "word_count" => array("type" => "long"),
+                    )
+                );
+                break;
+            default:
+                $mapping = array();
+                break;
         }
-        return SV_Utils_ElasticSearch::getOptimizableMappings($mappingTypes, $mappings, $extraMappings);
+        if (is_callable('parent::getOptimizableMappingFor'))
+        {
+            $mapping = array_merge(parent::getOptimizableMappingFor($type), $mapping);
+        }
+        return $mapping;
+    }
+
+    // copied from XenES_Model_Elasticsearch, as it isn't extendable
+    public function getOptimizableMappings(array $mappingTypes = null, $mappings = null)
+    {
+        if ($mappingTypes === null)
+        {
+            $mappingTypes = $this->getAllSearchContentTypes();
+        }
+        if ($mappings === null)
+        {
+            $mappings = $this->getMappings();
+        }
+
+        $optimizable = array();
+
+        foreach ($mappingTypes AS $type)
+        {
+            if (!$mappings || !isset($mappings->$type)) // no index or no mapping
+            {
+                $optimize = true;
+            }
+            else
+            {
+                // our change
+                $expectedMapping = array_merge(static::$optimizedGenericMapping, $this->getOptimizableMappingFor($type));
+                $optimize = $this->_verifyMapping($mappings->$type, $expectedMapping);
+            }
+
+            if ($optimize)
+            {
+                $optimizable[] = $type;
+            }
+        }
+
+        return $optimizable;
     }
 
     public function optimizeMapping($type, $deleteFirst = true, array $extra = array())
     {
-        if (isset(SV_WordCountSearch_Installer::$extraMappings[$type]))
-        {
-            $extra = array_merge($extra, SV_WordCountSearch_Installer::$extraMappings[$type]);
-        }
-
-        parent::optimizeMapping($type, $deleteFirst, $extra);
+        parent::optimizeMapping($type, $deleteFirst, array_merge($extra, $this->getOptimizableMappingFor($type)));
     }
 }
