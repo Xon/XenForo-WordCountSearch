@@ -49,6 +49,13 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
                 insert ignore into xf_post_words (post_id, word_count) values (?,?)
             ", array($newPost['post_id'], $wordcount));
         }
+        else if ($wordcount === null)
+        {
+            $db = XenForo_Application::getDb();
+            $db->query("
+                insert ignore into xf_post_words (post_id, word_count) select ?, word_count from xf_post_words where post_id = ?
+            ", array($newPost['post_id'], $post['post_id']));
+        }
     }
 
     protected function _getSearchModel()
