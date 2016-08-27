@@ -5,7 +5,10 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
     protected function _getPostFetchOptions(array $thread, array $forum)
     {
         $postFetchOptions = parent::_getPostFetchOptions($thread, $forum);
-        $postFetchOptions['skip_wordcount'] = true;
+        if (!isset($postFetchOptions['skip_wordcount']))
+        {
+            $postFetchOptions['skip_wordcount'] = true;
+        }
         return $postFetchOptions;
     }
 }
