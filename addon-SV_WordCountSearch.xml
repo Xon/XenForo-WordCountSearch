@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_WordCountSearch" title="Enhanced Search Improvements - Word Count" version_string="1.0.5" version_id="1000500" url="https://xenforo.com/community/resources/enhanced-search-improvements-word-count.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="SV_WordCountSearch" title="Enhanced Search Improvements - Word Count" version_string="1.0.6" version_id="1000600" url="https://xenforo.com/community/resources/enhanced-search-improvements-word-count.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -32,7 +32,17 @@
   </phrases>
   <route_prefixes/>
   <style_properties/>
-  <templates/>
+  <templates>
+    <template title="SV_WordCountSearch_search_form" version_id="1000600" version_string="1.0.6"><![CDATA[<xen:if is="{$search.range_query}">
+<dl class="ctrlUnit">
+		<dt><label for="ctrl_word_count_lower">{xen:phrase word_count}:</label></dt>
+		<dd>
+			<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="word_count[lower]" value="{$search.word_count.lower}" class="textCtrl" id="ctrl_word_count_lower" /> - 
+			<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="word_count[upper]" value="{$search.word_count.upper}" class="textCtrl" id="ctrl_word_count_upper" />
+		</dd>
+	</dl>
+</xen:if>]]></template>
+  </templates>
   <public_template_modifications>
     <modification template="search_bar" modification_key="SV_WordCountSearch_search_bar_1" description="Inject Word count filter" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<xen:if is="{$searchBar}">]]></find>
@@ -46,18 +56,15 @@
 </xen:if>
 $0]]></replace>
     </modification>
-    <modification template="search_form" modification_key="SV_WordCountSearch_search_form_1" description="Inject Word count filter" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[<xen:if is="{$nodes}">]]></find>
-      <replace><![CDATA[<xen:if is="{$search.range_query}">
-<dl class="ctrlUnit">
-		<dt><label for="ctrl_word_count_lower">{xen:phrase word_count}:</label></dt>
-		<dd>
-			<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="word_count[lower]" value="{$search.word_count.lower}" class="textCtrl" id="ctrl_word_count_lower" /> - 
-			<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="word_count[upper]" value="{$search.word_count.upper}" class="textCtrl" id="ctrl_word_count_upper" />
-		</dd>
-	</dl>
-</xen:if>
-$0]]></replace>
+    <modification template="search_form" modification_key="SV_WordCountSearch_search_form_1" description="Inject Word count filter" execution_order="4763" enabled="1" action="preg_replace">
+      <find><![CDATA[#{xen:phrase newer_than.*?</dl>#si]]></find>
+      <replace><![CDATA[$0
+<xen:include template="SV_WordCountSearch_search_form" />]]></replace>
+    </modification>
+    <modification template="search_form_post" modification_key="SV_WordCountSearch_search_form_post" description="Inject Word count filter" execution_order="4763" enabled="1" action="preg_replace">
+      <find><![CDATA[#xen:phrase newer_than.*?</dl>#si]]></find>
+      <replace><![CDATA[$0
+<xen:include template="SV_WordCountSearch_search_form" />]]></replace>
     </modification>
     <modification template="search_result_post" modification_key="SV_WordCountSearch_search_result_post_1" description="Inject Word count" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#\w*{xen:phrase post_by}#si]]></find>
