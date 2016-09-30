@@ -13,7 +13,7 @@ class SV_WordCountSearch_Deferred_WordCountMigration extends XenForo_Deferred_Ab
 			SELECT xf_post.post_id, xf_post.message
 			FROM xf_post
             left join xf_post_words on xf_post_words.post_id = xf_post.post_id
-			WHERE xf_post.post_id > ? and xf_post_words.post_id is null;
+			WHERE xf_post.post_id > ? and xf_post_words.post_id is null
 			ORDER BY xf_post.post_id
 		', $increment), $min_post_id);
 
