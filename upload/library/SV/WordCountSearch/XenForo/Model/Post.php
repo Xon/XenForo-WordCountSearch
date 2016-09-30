@@ -23,9 +23,15 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
     {
         $post = parent::preparePost($post, $thread, $forum, $nodePermissions, $viewingUser);
 
-        if (isset($post['word_count']))
+        $WordCountField = SV_WordCountSearch_Globals::WordCountField;
+        if (isset($post[$WordCountField]))
         {
-            $post['WordCount'] = $this->_getSearchModel()->roundWordCount($post['word_count']);
+            $searchModel = $this->_getSearchModel();
+            if ($post[$WordCountField] === null)
+            {
+                $post[$WordCountField] = $searchModel->getTextWordCount($post['message']);
+            }
+            $post['WordCount'] = $searchModel->roundWordCount($post[$WordCountField]);
         }
 
         return $post;
@@ -42,19 +48,22 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
 
         $newPost = parent::_copyPost($post, $targetThread, $forum);
 
+        $db = XenForo_Application::getDb();
         if ($wordcount !== null)
         {
-            $db = XenForo_Application::getDb();
-            $db->query("
-                insert ignore into xf_post_words (post_id, word_count) values (?,?)
-            ", array($newPost['post_id'], $wordcount));
+            if ($wordcount >= SV_WordCountSearch_Globals::$wordCountThreshold)
+            {                
+                $db->query("
+                    insert ignore into xf_post_words (post_id, word_count) values (?,?)
+                ", array($newPost['post_id'], $wordcount));
+            }
         }
         else if ($wordcount === null)
         {
             $db = XenForo_Application::getDb();
             $db->query("
-                insert ignore into xf_post_words (post_id, word_count) select ?, word_count from xf_post_words where post_id = ?
-            ", array($newPost['post_id'], $post['post_id']));
+                insert ignore into xf_post_words (post_id, word_count) select ?, word_count from xf_post_words where post_id = ? and word_count >= ?
+            ", array($newPost['post_id'], $post['post_id'], SV_WordCountSearch_Globals::$wordCountThreshold));
         }
     }
 
