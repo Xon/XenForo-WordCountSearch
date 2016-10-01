@@ -32,10 +32,10 @@ class SV_WordCountSearch_Installer
         // requires overriding XenES_Model_Elasticsearch
         SV_Utils_Deferred_Search::SchemaUpdates($requireIndexing);
 
-        if ($version < 1000701)
+        if ($version < 1000703)
         {
             $db->query("truncate table xf_post_words");
-            XenForo_Application::defer('SV_WordCountSearch_Deferred_WordCountMigration', array('position' => -1));
+            XenForo_Application::defer('SV_WordCountSearch_Deferred_WordCountMigration', array('position' => -1), 'WordCountMigration', true);
         }
     }
 

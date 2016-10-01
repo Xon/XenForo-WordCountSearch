@@ -9,7 +9,7 @@ class SV_WordCountSearch_Deferred_WordCountMigration extends XenForo_Deferred_Ab
 
         $db = XenForo_Application::getDb();
 
-        $posts = $db->fetchCol($db->limit('
+        $posts = $db->fetchAll($db->limit('
 			SELECT xf_post.post_id, xf_post.message
 			FROM xf_post
             left join xf_post_words on xf_post_words.post_id = xf_post.post_id
