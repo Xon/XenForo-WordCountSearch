@@ -5,7 +5,7 @@
 class SV_WordCountSearch_Globals
 {
     const WordCountField = 'word_count';
-    public static $wordCountThreshold = 20;
+    public static $wordCountThreshold = 100;
 
     private function __construct() {}
 }
