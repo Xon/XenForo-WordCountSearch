@@ -4,7 +4,7 @@ class SV_WordCountSearch_Deferred_WordCountMigration extends XenForo_Deferred_Ab
 {
     public function execute(array $deferred, array $data, $targetRunTime, &$status)
     {
-        $increment = 200;
+        $increment = 1000;
         $min_post_id = isset($data['position']) ? $data['position'] : -1;
 
         $db = XenForo_Application::getDb();
