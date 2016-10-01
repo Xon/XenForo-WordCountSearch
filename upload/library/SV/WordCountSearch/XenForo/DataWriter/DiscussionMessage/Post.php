@@ -32,9 +32,10 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
     {
         parent::_messagePostDelete();
         $db = $this->_db;
-        $post_id = $this->get('post_id');
-
         $db->query('delete from xf_post_words where post_id = ?', array($this->get('post_id')));
+        // prevent the datawriter trying to delete the xf_post_words row and erroring with "Cannot delete data without a condition"
+        $this->_includeWordCount = false;
+        unset($this->_fields['xf_post_words']);
     }
 
     protected $_wordCount = null;
