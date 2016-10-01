@@ -36,8 +36,9 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
 
         $db->query('delete from xf_post_words where post_id = ?', array($this->get('post_id')));
     }
-    
-    protected $deferredWordCountInsert = null;
+
+    protected $_wordCount = null;
+    protected $deferredWordCountInsert = false;
 
     protected function _messagePreSave()
     {
@@ -49,8 +50,8 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         if ($this->isChanged('word_count') || $this->isInsert())
         {
             $db = $this->_db;
-            $wordCount = $this->get('word_count');
-            if ($wordCount < SV_WordCountSearch_Globals::$wordCountThreshold)
+            $this->_wordCount = $this->get('word_count');
+            if ($this->_wordCount < SV_WordCountSearch_Globals::$wordCountThreshold)
             {
                 if ($this->getExisting('word_count'))
                 {
@@ -60,7 +61,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
             }
             else
             {
-                $this->deferredWordCountInsert = $wordCount;
+                $this->deferredWordCountInsert = true;
             }
             $this->_includeWordCount = false;
             unset($this->_fields['xf_post_words']);
@@ -68,11 +69,16 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
             unset($this->_existingData['xf_post_words']);
         }
     }
-    
+
     protected function _messagePostSave()
     {
-        parent::_messagePostSave();
-        if ($this->deferredWordCountInsert !== null)
+        $this->_includeWordCount = true;
+        if ($this->_wordCount !== null)
+        {
+            $this->_fields = $this->_getFields();
+            $this->_newData['xf_post_words']['word_count'] = $this->_wordCount;
+        }
+        if ($this->deferredWordCountInsert)
         {
             $db = $this->_db;
             $db->query("
@@ -80,8 +86,10 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                 values (?,?)
                 on duplicate key update
                     word_count = values(word_count)
-            ", array($this->get('post_id'), $this->deferredWordCountInsert));
+            ", array($this->get('post_id'), $this->_wordCount));
         }
+
+        parent::_messagePostSave();
     }
 
     protected function _getSearchModel()
