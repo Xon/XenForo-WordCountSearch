@@ -22,7 +22,10 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         $postData = parent::_getExistingData($data);
         if (isset($postData['xf_post']['word_count']))
         {
-            $postData['xf_post_words'] = array('post_id' => $postData['xf_post']['post_id'], 'word_count' => $postData['xf_post']['word_count']);
+            if ($this->_includeWordCount)
+            {
+                $postData['xf_post_words'] = array('post_id' => $postData['xf_post']['post_id'], 'word_count' => $postData['xf_post']['word_count']);
+            }
             unset($postData['xf_post']['word_count']);
         }
         return $postData;
