@@ -40,7 +40,7 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
     protected function _copyPost(array $post, array $targetThread, array $forum)
     {
         $wordcount = null;
-        if (isset($post['word_count']))
+        if (array_key_exists('word_count', $post))
         {
             $wordcount = $post['word_count'];
             unset($post['word_count']);
