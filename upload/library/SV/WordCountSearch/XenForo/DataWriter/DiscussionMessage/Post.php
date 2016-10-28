@@ -54,7 +54,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         parent::_messagePreSave();
         if ($this->isChanged('message') || $this->isInsert())
         {
-            $this->_wordCount = $this->_getSearchModel()->getTextWordCount($this->get('message'))
+            $this->_wordCount = $this->_getSearchModel()->getTextWordCount($this->get('message'));
             $this->set('word_count', $this->_wordCount);
         }
         if ($this->_wordCount)
