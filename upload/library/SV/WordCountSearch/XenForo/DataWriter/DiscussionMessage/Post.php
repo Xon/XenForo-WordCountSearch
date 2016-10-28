@@ -52,14 +52,14 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
     protected function _messagePreSave()
     {
         parent::_messagePreSave();
-        if ($this->isChanged('message'))
+        if ($this->isChanged('message') || $this->isInsert())
         {
-            $this->set('word_count', $this->_getSearchModel()->getTextWordCount($this->get('message')));
+            $this->_wordCount = $this->_getSearchModel()->getTextWordCount($this->get('message'))
+            $this->set('word_count', $this->_wordCount);
         }
-        if ($this->isChanged('word_count') || $this->isInsert())
+        if ($this->_wordCount)
         {
             $db = $this->_db;
-            $this->_wordCount = $this->get('word_count');
             if ($this->_wordCount < SV_WordCountSearch_Globals::$wordCountThreshold)
             {
                 if ($this->getExisting('word_count'))
