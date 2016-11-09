@@ -96,13 +96,44 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                 on duplicate key update
                     word_count = values(word_count)
             ", array($this->get('post_id'), $this->_wordCount));
+
+            if ($threadmarksModel = $this->_getThreadmarksModel())
+            {
+                if ($threadmarksModel->getByPostId($this->get('post_id')))
+                {
+                    $this->_invalidateThreadWordCountCacheEntry();
+                }
+            }
         }
 
         parent::_messagePostSave();
     }
 
+    protected function _invalidateThreadWordCountCacheEntry()
+    {
+        $cache = \XenForo_Application::getCache();
+
+        if ($cache)
+        {
+            $cacheKey  = 'SV_WordCountSearch_threadmarks';
+            $cacheKey .= "_thread{$this->get('thread_id')}";
+
+            $cache->remove($cacheKey);
+        }
+    }
+
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
+    }
+
+    protected function _getThreadmarksModel()
+    {
+        if (!class_exists('Sidane_Threadmarks_Model_Threadmarks'))
+        {
+            return false;
+        }
+
+        return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
     }
 }
