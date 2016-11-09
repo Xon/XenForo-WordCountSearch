@@ -13,6 +13,13 @@ class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSear
                     )
                 );
                 break;
+            case 'thread':
+                $mapping = array(
+                    "properties" => array(
+                        "word_count" => array("type" => "long"),
+                    )
+                );
+                break;
             default:
                 $mapping = array();
                 break;
