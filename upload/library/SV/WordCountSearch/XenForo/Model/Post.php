@@ -37,6 +37,24 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         return $post;
     }
 
+    public function shouldRecordPostWordCount($postId, $wordCount)
+    {
+        if ($wordCount >= SV_WordCountSearch_Globals::$wordCountThreshold)
+        {
+            return true;
+        }
+
+        if ($threadmarksModel = $this->_getThreadmarksModel())
+        {
+            if ($threadmarksModel->getByPostId($postId))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function _copyPost(array $post, array $targetThread, array $forum)
     {
         $wordcount = null;
@@ -70,5 +88,15 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
+    }
+
+    protected function _getThreadmarksModel()
+    {
+        if (!class_exists('Sidane_Threadmarks_Model_Threadmarks'))
+        {
+            return false;
+        }
+
+        return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
     }
 }

@@ -60,7 +60,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         if ($this->_wordCount)
         {
             $db = $this->_db;
-            if ($this->_wordCount < SV_WordCountSearch_Globals::$wordCountThreshold)
+            if (!$this->_getPostModel()->shouldRecordPostWordCount($this->get('post_id'), $this->_wordCount))
             {
                 if ($this->getExisting('word_count'))
                 {
