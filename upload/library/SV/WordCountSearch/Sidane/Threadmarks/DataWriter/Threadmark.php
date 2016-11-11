@@ -10,7 +10,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
         }
         elseif ($this->isUpdate())
         {
-            if ($this->isChanged('message_state')
+            if ($this->isChanged('message_state'))
             {
                 if (
                     $this->get('message_state') === 'visible' or
