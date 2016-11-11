@@ -28,15 +28,27 @@ class SV_WordCountSearch_Installer
             ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci
         ");
 
-        // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
-        // requires overriding XenES_Model_Elasticsearch
-        SV_Utils_Deferred_Search::SchemaUpdates($requireIndexing);
-
         if ($version < 1000703)
         {
             $db->query("truncate table xf_post_words");
             XenForo_Application::defer('SV_WordCountSearch_Deferred_WordCountMigration', array('position' => -1), 'WordCountMigration', true);
         }
+
+        if ($version < 1010000)
+        {
+            $requireIndexing['thread'] = true;
+
+            XenForo_Application::defer(
+                'SV_WordCountSearch_Deferred_ThreadmarkWordCount',
+                array('position' => -1),
+                'ThreadmarkWordCount',
+                true
+            );
+        }
+
+        // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
+        // requires overriding XenES_Model_Elasticsearch
+        SV_Utils_Deferred_Search::SchemaUpdates($requireIndexing);
     }
 
     public static function uninstall()
