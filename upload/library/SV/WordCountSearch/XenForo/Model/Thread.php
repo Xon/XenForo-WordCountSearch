@@ -8,8 +8,7 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
 
         if ($cache)
         {
-            $cacheKey = 'SV_WordCountSearch_threadmarks';
-            $cacheKey .= "_thread{$threadId}";
+            $cacheKey = "SV_WordCountSearch_threadmarks_thread{$threadId}";
 
             $wordCount = unserialize($cache->load($cacheKey));
 

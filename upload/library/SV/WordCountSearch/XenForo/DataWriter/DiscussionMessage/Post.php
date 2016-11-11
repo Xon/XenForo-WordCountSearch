@@ -116,8 +116,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
 
         if ($cache)
         {
-            $cacheKey  = 'SV_WordCountSearch_threadmarks';
-            $cacheKey .= "_thread{$this->get('thread_id')}";
+            $cacheKey = "SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}";
 
             $cache->remove($cacheKey);
         }
