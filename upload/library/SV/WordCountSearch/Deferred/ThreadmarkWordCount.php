@@ -4,7 +4,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 {
     public function execute(array $deferred, array $data, $targetRunTime, &$status)
     {
-        $increment = 1000;
+        $increment = (isset($data['batch']) ? $data['batch'] : 1000);
         $min_threadmark_id = isset($data['position']) ? $data['position'] : -1;
 
         $db = XenForo_Application::getDb();
@@ -39,7 +39,13 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $actionPhrase = new XenForo_Phrase('rebuilding');
         $typePhrase = new XenForo_Phrase('post');
         $wordCount = new XenForo_Phrase('word_count');
-        $status = sprintf('%s... %s %s (%s)', $actionPhrase, $typePhrase, $wordCount, XenForo_Locale::numberFormat($data['position']));
+        $status = sprintf(
+            '%s... %s %s (%s)',
+            $actionPhrase,
+            $typePhrase,
+            $wordCount,
+            XenForo_Locale::numberFormat($data['position'])
+        );
 
         if (empty($min_threadmark_id))
         {
