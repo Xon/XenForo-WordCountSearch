@@ -14,7 +14,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
             if ($this->isChanged('message_state'))
             {
                 if (
-                    $this->get('message_state') === 'visible' or
+                    $this->get('message_state') === 'visible' ||
                     $this->getExisting('message_state') === 'visible'
                 )
                 {
