@@ -2,6 +2,11 @@
 
 class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_XenForo_Model_Thread
 {
+    /**
+     * The TTL for cached thread word count queries. Default is 4 hours.
+     */
+    const WORD_COUNT_CACHE_TTL = 14400;
+
     public function getThreadmarkWordCountByThread($threadId)
     {
         $cache = \XenForo_Application::getCache();
@@ -35,7 +40,12 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
 
         if ($cache)
         {
-            $cache->save(serialize($wordCount), $cacheKey, array(), 14400);
+            $cache->save(
+                (string) $wordCount,
+                $cacheKey,
+                array(),
+                self::WORD_COUNT_CACHE_TTL
+            );
         }
 
         return $wordCount;
