@@ -28,7 +28,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 
         foreach($threadmarks as $threadmark)
         {
-            $min_threadmark_id = $threadmark['post_id'];
+            $min_threadmark_id = $threadmark['threadmark_id'];
             $wordCount = $searchModel->getTextWordCount($threadmark['message']);
 
             $db->query("
