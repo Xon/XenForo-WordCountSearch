@@ -26,4 +26,18 @@ class SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks extends XFCP_SV_Wo
             'joinTables'   => $joinTables
         );
     }
+
+    public function prepareThreadmark(array $threadmark, array $thread, array $forum, array $nodePermissions = null, array $viewingUser = null)
+    {
+        if (!empty($threadmark['word_count']))
+        {
+            $threadmark['WordCount'] = $this-> _getSearchModel()->roundWordCount($threadmark['word_count']);
+        }
+        return parent::prepareThreadmark($threadmark, $thread, $forum, $nodePermissions, $viewingUser);
+    }
+
+    protected function _getSearchModel()
+    {
+        return $this->getModelFromCache('XenForo_Model_Search');
+    }
 }

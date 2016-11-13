@@ -20,8 +20,8 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
 
         $threadId = $this->_input->filterSingle('thread_id', XenForo_Input::UINT);
 
-        $viewParams['totalWordCount'] = $this->_getThreadModel()
-            ->getThreadmarkWordCountByThread($threadId);
+        $viewParams['thread']['word_count'] = $this->_getThreadModel()->getThreadmarkWordCountByThread($threadId);
+        $viewParams['totalWordCount'] = $this-> _getSearchModel()->roundWordCount($viewParams['thread']['word_count']);
 
         return $response;
     }
@@ -43,5 +43,10 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
         $fetchOptions['join'] |= SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks::FETCH_WORD_COUNT;
 
         return $fetchOptions;
+    }
+
+    protected function _getSearchModel()
+    {
+        return $this->getModelFromCache('XenForo_Model_Search');
     }
 }
