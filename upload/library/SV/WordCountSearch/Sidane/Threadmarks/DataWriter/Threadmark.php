@@ -40,13 +40,11 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
 
     protected function _invalidateThreadWordCountCacheEntry()
     {
-        $cache = \XenForo_Application::getCache();
+        $cache = XenForo_Application::getCache();
 
         if ($cache)
         {
-            $cacheKey = "SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}";
-
-            $cache->remove($cacheKey);
+            $cache->remove("SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}");
         }
     }
 

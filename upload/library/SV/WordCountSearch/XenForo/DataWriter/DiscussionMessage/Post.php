@@ -112,13 +112,11 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
 
     protected function _invalidateThreadWordCountCacheEntry()
     {
-        $cache = \XenForo_Application::getCache();
+        $cache = XenForo_Application::getCache();
 
         if ($cache)
         {
-            $cacheKey = "SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}";
-
-            $cache->remove($cacheKey);
+            $cache->remove("SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}");
         }
     }
 
