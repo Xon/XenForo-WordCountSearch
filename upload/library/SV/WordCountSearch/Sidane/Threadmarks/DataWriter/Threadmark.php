@@ -10,6 +10,21 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
         {
             if ($this->get('message_state') == 'visible')
             {
+                $post = $this->_getPostModel()->getPostById($this->get('post_id'));
+
+                if (!$post['word_count'])
+                {
+                    $wordCount = $this->_getSearchModel()->getTextWordCount($post['message']);
+
+                    $db = $this->_db;
+
+                    $db->query(
+                        "INSERT IGNORE xf_post_words (post_id, word_count)
+                            VALUES (?,?)",
+                        array($this->get('post_id'), $wordCount)
+                    );
+                }
+
                 $this->_invalidateThreadWordCountCacheEntry();
                 $this->_updateThreadSearchIndex();
             }
@@ -34,10 +49,15 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
     {
         parent::_postDelete();
 
-        $this->_db->delete(
-            'xf_post_words',
-            'post_id = ' . $this->_db->quote($this->get('post_id'))
-        );
+        $post = $this->_getPostModel()->getPostById($this->get('post_id'));
+
+        if ($post['word_count'] < SV_WordCountSearch_Globals::$wordCountThreshold)
+        {
+            $this->_db->delete(
+                'xf_post_words',
+                'post_id = ' . $this->_db->quote($this->get('post_id'))
+            );
+        }
 
         $this->_invalidateThreadWordCountCacheEntry();
         $this->_updateThreadSearchIndex();
@@ -70,5 +90,10 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
     protected function _getPostModel()
     {
         return $this->getModelFromCache('XenForo_Model_Post');
+    }
+
+    protected function _getSearchModel()
+    {
+        return $this->getModelFromCache('XenForo_Model_Search');
     }
 }
