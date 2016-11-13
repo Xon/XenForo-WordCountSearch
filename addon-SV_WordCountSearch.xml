@@ -77,6 +77,13 @@ $0]]></replace>
 </xen:if>
 $0]]></replace>
     </modification>
+    <modification template="search_result_thread" modification_key="SV_WordCountSearch_search_result_thread_1" description="Inject Word count" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#\w*{xen:phrase thread_by}#si]]></find>
+      <replace><![CDATA[<xen:if is="{$post.WordCount}">
+{xen:phrase word_count}: <a class="wordcount">{$post.WordCount}</a>,
+</xen:if>
+$0]]></replace>
+    </modification>
     <modification template="threadmark_preview" modification_key="SV_WordCountSearch_threadmark_preview_count" description="Adds total word count to Threadmark preview" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<xen:datetime time="{$post.post_date}" class="faint" />]]></find>
       <replace><![CDATA[$0
