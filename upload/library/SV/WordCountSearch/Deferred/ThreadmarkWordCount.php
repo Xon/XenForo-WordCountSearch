@@ -10,7 +10,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $db = XenForo_Application::getDb();
 
         $threadmarks = $db->fetchAll($db->limit('
-			SELECT threadmarks.post_id, xf_post.message
+			SELECT threadmarks.threadmark_id, threadmarks.post_id, xf_post.message
 			FROM threadmarks
             INNER JOIN xf_post ON (xf_post.post_id = threadmarks.post_id)
             LEFT JOIN xf_post_words ON (xf_post_words.post_id = threadmarks.post_id)
