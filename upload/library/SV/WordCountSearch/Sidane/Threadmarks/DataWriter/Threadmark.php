@@ -8,8 +8,11 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
 
         if ($this->isInsert())
         {
-            $this->_invalidateThreadWordCountCacheEntry();
-            $this->_updateSearchIndexes();
+            if ($this->get('message_state') == 'visible')
+            {
+                $this->_invalidateThreadWordCountCacheEntry();
+                $this->_updateSearchIndexes();
+            }
         }
         elseif ($this->isUpdate())
         {
