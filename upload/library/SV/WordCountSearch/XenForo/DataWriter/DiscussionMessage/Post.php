@@ -101,23 +101,13 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
             {
                 if ($threadmarksModel->getByPostId($this->get('post_id')))
                 {
-                    $this->_invalidateThreadWordCountCacheEntry();
+                    $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
                     $this->_updateThreadSearchIndex();
                 }
             }
         }
 
         parent::_messagePostSave();
-    }
-
-    protected function _invalidateThreadWordCountCacheEntry()
-    {
-        $cache = XenForo_Application::getCache();
-
-        if ($cache)
-        {
-            $cache->remove("SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}");
-        }
     }
 
     protected function _updateThreadSearchIndex()

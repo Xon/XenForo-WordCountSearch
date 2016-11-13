@@ -25,7 +25,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                     );
                 }
 
-                $this->_invalidateThreadWordCountCacheEntry();
+                $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
                 $this->_updateThreadSearchIndex();
             }
         }
@@ -38,7 +38,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                     $this->getExisting('message_state') === 'visible'
                 )
                 {
-                    $this->_invalidateThreadWordCountCacheEntry();
+                    $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
                     $this->_updateThreadSearchIndex();
                 }
             }
@@ -59,18 +59,8 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
             );
         }
 
-        $this->_invalidateThreadWordCountCacheEntry();
+        $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
         $this->_updateThreadSearchIndex();
-    }
-
-    protected function _invalidateThreadWordCountCacheEntry()
-    {
-        $cache = XenForo_Application::getCache();
-
-        if ($cache)
-        {
-            $cache->remove("SV_WordCountSearch_threadmarks_thread{$this->get('thread_id')}");
-        }
     }
 
     protected function _updateThreadSearchIndex()

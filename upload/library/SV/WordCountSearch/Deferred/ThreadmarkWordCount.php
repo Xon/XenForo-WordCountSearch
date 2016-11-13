@@ -10,7 +10,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $db = XenForo_Application::getDb();
 
         $threadmarks = $db->fetchAll($db->limit('
-			SELECT threadmarks.threadmark_id, threadmarks.post_id, xf_post.message
+			SELECT threadmarks.threadmark_id, threadmarks.post_id, xf_post.message, xf_post.thread_id
 			FROM threadmarks
             INNER JOIN xf_post ON (xf_post.post_id = threadmarks.post_id)
             LEFT JOIN xf_post_words ON (xf_post_words.post_id = threadmarks.post_id)
@@ -24,6 +24,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         }
 
         $searchModel = XenForo_Model::create('XenForo_Model_Search');
+        $threadModel = XenForo_Model::create('XenForo_Model_Thread');
         $min_threadmark_id = false;
 
         foreach ($threadmarks as $threadmark)
@@ -35,6 +36,12 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
                 "INSERT IGNORE xf_post_words (post_id, word_count) VALUES(?,?)",
                 array($threadmark['post_id'], $wordCount)
             );
+        }
+
+        $threadIds = array_unique(XenForo_Application::arrayColumn($threadmarks, 'thread_id'));
+        foreach($threadIds as $threadId)
+        {
+            $threadModel->invalidateThreadWordCountCacheEntry($threadId);
         }
 
         $actionPhrase = new XenForo_Phrase('rebuilding');

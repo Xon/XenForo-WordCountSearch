@@ -7,6 +7,16 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
      */
     const WORD_COUNT_CACHE_TTL = 14400;
 
+    public function invalidateThreadWordCountCacheEntry($threadId)
+    {
+        $cache = XenForo_Application::getCache();
+
+        if ($cache)
+        {
+            $cache->remove("SV_WordCountSearch_threadmarks_thread{$threadId}");
+        }
+    }
+
     public function getThreadmarkWordCountByThread($threadId, $cache = true)
     {
         if ($cache)
