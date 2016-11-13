@@ -102,7 +102,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                 if ($threadmarksModel->getByPostId($this->get('post_id')))
                 {
                     $this->_invalidateThreadWordCountCacheEntry();
-                    $this->_updateSearchIndexes();
+                    $this->_updateThreadSearchIndex();
                 }
             }
         }
@@ -120,7 +120,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         }
     }
 
-    protected function _updateSearchIndexes()
+    protected function _updateThreadSearchIndex()
     {
         $indexer = new XenForo_Search_Indexer();
         $thread = $this->getDiscussionData();
