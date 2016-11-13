@@ -4,7 +4,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 {
     public function execute(array $deferred, array $data, $targetRunTime, &$status)
     {
-        $increment = (isset($data['batch']) ? $data['batch'] : 1000);
+        $increment = isset($data['batch']) ? $data['batch'] : 1000;
         $min_threadmark_id = isset($data['position']) ? $data['position'] : -1;
 
         $db = XenForo_Application::getDb();
@@ -14,7 +14,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 			FROM threadmarks
             INNER JOIN xf_post ON (xf_post.post_id = threadmarks.post_id)
             LEFT JOIN xf_post_words ON (xf_post_words.post_id = threadmarks.post_id)
-			WHERE threadmarks.threadmark_id > ? and xf_post_words.post_id IS NULL
+			WHERE threadmarks.threadmark_id > ? AND xf_post_words.post_id IS NULL
 			ORDER BY threadmarks.post_id
 		', $increment), $min_threadmark_id);
 
@@ -26,14 +26,15 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $searchModel = XenForo_Model::create('XenForo_Model_Search');
         $min_threadmark_id = false;
 
-        foreach($threadmarks as $threadmark)
+        foreach ($threadmarks as $threadmark)
         {
             $min_threadmark_id = $threadmark['threadmark_id'];
             $wordCount = $searchModel->getTextWordCount($threadmark['message']);
 
-            $db->query("
-                insert ignore xf_post_words (post_id, word_count) values(?,?)
-            ", array($threadmark['post_id'], $wordCount));
+            $db->query(
+                "INSERT IGNORE xf_post_words (post_id, word_count) VALUES(?,?)",
+                array($threadmark['post_id'], $wordCount)
+            );
         }
 
         $actionPhrase = new XenForo_Phrase('rebuilding');
