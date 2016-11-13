@@ -60,14 +60,6 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
         );
 
         $threadHandler->insertIntoIndex($indexer, $thread);
-
-        $post = $this->_getPostModel()->getPostById($this->get('post_id'));
-
-        $postHandler = XenForo_Search_DataHandler_Abstract::create(
-            'XenForo_Search_DataHandler_Post'
-        );
-
-        $postHandler->insertIntoIndex($indexer, $post, $thread);
     }
 
     protected function _getPostModel()

@@ -7,7 +7,7 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
         if (!isset($data[SV_WordCountSearch_Globals::WordCountField]))
         {
             $wordcount = $this->_getSearchModel()->getTextWordCount($data['message']);
-            if ($this->_getPostModel()->shouldRecordPostWordCount($data['post_id'], $wordcount))
+            if ($wordcount >= SV_WordCountSearch_Globals::$wordCountThreshold)
             {
                 $db = XenForo_Application::getDb();
                 $db->query("
