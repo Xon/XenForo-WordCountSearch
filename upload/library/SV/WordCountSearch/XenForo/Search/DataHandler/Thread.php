@@ -8,7 +8,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
 
         if (!empty($data['threadmark_count']))
         {
-            $wordcount = $this->_getThreadModel()->getThreadmarkWordCountByThread($data['thread_id']);
+            $wordcount = $this->_getThreadModel()->getThreadmarkWordCountByThread(
+                $data['thread_id'],
+                false
+            );
         }
 
         $metadata = array();
@@ -20,7 +23,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
         }
         else
         {
-            $indexer = new SV_SearchImprovements_Search_IndexerProxy($indexer, $metadata);
+            $indexer = new SV_SearchImprovements_Search_IndexerProxy(
+                $indexer,
+                $metadata
+            );
         }
 
         parent::_insertIntoIndex($indexer, $data, $parentData);
