@@ -2,8 +2,10 @@
 
 class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark
 {
-    protected function _postSave()
+    protected function _postSaveAfterTransaction()
     {
+        parent::_postSaveAfterTransaction();
+
         if ($this->isInsert())
         {
             $this->_invalidateThreadWordCountCacheEntry();
