@@ -39,8 +39,13 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
         $WordCountField = SV_WordCountSearch_Globals::WordCountField;
         if (isset($thread[$WordCountField]))
         {
-            $thread['WordCount'] = $searchModel->roundWordCount($thread[$WordCountField]);
+            $thread['WordCount'] = $this->_getSearchModel()->roundWordCount($thread[$WordCountField]);
         }
         return parent::prepareThread($thread, $forum, $nodePermissions, $viewingUser);
+    }
+
+    protected function _getSearchModel()
+    {
+        return $this->getModelFromCache('XenForo_Model_Search');
     }
 }
