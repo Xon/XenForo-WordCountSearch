@@ -27,6 +27,12 @@ class SV_WordCountSearch_Installer
                 PRIMARY KEY (`post_id`)
             ) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci
         ");
+        \SV_Utils_Install::addColumn(
+            'xf_thread',
+            'word_count',
+            "int(10) unsigned
+                DEFAULT NULL"
+        );
 
         if ($version < 1000703)
         {
@@ -36,13 +42,6 @@ class SV_WordCountSearch_Installer
 
         if ($version < 1010001)
         {
-            \SV_Utils_Install::addColumn(
-                'xf_thread',
-                'word_count',
-                "int(10) unsigned
-                    DEFAULT NULL"
-            );
-
             if (self::addOnIsActive('sidaneThreadmarks'))
             {
                 XenForo_Application::defer(
