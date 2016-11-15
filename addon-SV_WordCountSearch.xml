@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_WordCountSearch" title="Enhanced Search Improvements - Word Count" version_string="1.1.0" version_id="1010000" url="https://xenforo.com/community/resources/enhanced-search-improvements-word-count.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="SV_WordCountSearch" title="Enhanced Search Improvements - Word Count" version_string="1.1.0" version_id="1010001" url="https://xenforo.com/community/resources/enhanced-search-improvements-word-count.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -80,8 +80,8 @@ $0]]></replace>
     </modification>
     <modification template="search_result_thread" modification_key="SV_WordCountSearch_search_result_thread_1" description="Inject Word count" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#\w*{xen:phrase thread_by}#si]]></find>
-      <replace><![CDATA[<xen:if is="{$thread.word_count}">
-{xen:phrase word_count}: <a class="wordcount">{$thread.word_count}</a>,
+      <replace><![CDATA[<xen:if is="{$thread.WordCount}">
+{xen:phrase word_count}: <a class="wordcount">{$thread.WordCount}</a>,
 </xen:if>
 $0]]></replace>
     </modification>
@@ -104,7 +104,7 @@ $0]]></replace>
     </modification>
     <modification template="threadmarks" modification_key="SV_WordCountSearch_threadmarks_total_count" description="Adds total word count to Threadmarks index" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<div class="sectionFooter overlayOnly"><a class="button primary OverlayCloser">{xen:phrase close}</a></div>]]></find>
-      <replace><![CDATA[<div class="sectionFooter">{xen:phrase word_count}: {$totalWordCount} <a class="button primary overlayOnly OverlayCloser">{xen:phrase close}</a></div>]]></replace>
+      <replace><![CDATA[<div class="sectionFooter"><xen:if is="{$thread.WordCount}">{xen:phrase word_count}: {$thread.WordCount}</xen:if> <a class="button primary overlayOnly OverlayCloser">{xen:phrase close}</a></div>]]></replace>
     </modification>
   </public_template_modifications>
   <bb_code_media_sites/>

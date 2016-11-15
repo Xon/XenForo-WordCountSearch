@@ -34,7 +34,7 @@ class SV_WordCountSearch_Installer
             XenForo_Application::defer('SV_WordCountSearch_Deferred_WordCountMigration', array('position' => -1), 'WordCountMigration', true);
         }
 
-        if ($version < 1010000)
+        if ($version < 1010001)
         {
             \SV_Utils_Install::addColumn(
                 'xf_thread',

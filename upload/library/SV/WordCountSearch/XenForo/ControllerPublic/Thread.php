@@ -2,27 +2,6 @@
 
 class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCountSearch_XenForo_ControllerPublic_Thread
 {
-    public function actionThreadmarks()
-    {
-        if (!is_callable('parent::actionThreadmarks'))
-        {
-            return $this->getNotFoundResponse();
-        }
-
-        $response = parent::actionThreadmarks();
-
-        if (!$response instanceof XenForo_ControllerResponse_View)
-        {
-            return $response;
-        }
-
-        $viewParams = &$response->params;
-
-        $viewParams['totalWordCount'] = $this-> _getSearchModel()->roundWordCount($viewParams['thread']['word_count']);
-
-        return $response;
-    }
-
     protected function _getPostFetchOptions(array $thread, array $forum)
     {
         $postFetchOptions = parent::_getPostFetchOptions($thread, $forum);
