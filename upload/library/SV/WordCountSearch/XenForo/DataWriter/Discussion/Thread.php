@@ -16,11 +16,7 @@ class SV_WordCountSearch_XenForo_DataWriter_Discussion_Thread extends XFCP_SV_Wo
 
     public function rebuildDiscussionCounters($replyCount = false, $firstPostId = false, $lastPostId = false)
     {
-        parent::rebuildDiscussionCounters(
-            $replyCount = false,
-            $firstPostId = false,
-            $lastPostId = false
-        );
+        parent::rebuildDiscussionCounters($replyCount, $firstPostId, $lastPostId);
 
         $wordCount = $this->_getThreadModel()->countThreadmarkWordsInThread($this->get('thread_id'));
 
