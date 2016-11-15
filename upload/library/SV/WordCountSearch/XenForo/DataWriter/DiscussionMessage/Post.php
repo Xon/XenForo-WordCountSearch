@@ -97,7 +97,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                     word_count = values(word_count)
             ", array($this->get('post_id'), $this->_wordCount));
 
-            if ($threadmarksModel = $this->_getThreadmarksModel())
+            if ($threadmarksModel = $this->_getThreadmarksModelIfThreadmarksActive())
             {
                 if ($threadmarksModel->getByPostId($this->get('post_id')))
                 {
@@ -127,9 +127,14 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         return $this->getModelFromCache('XenForo_Model_Search');
     }
 
-    protected function _getThreadmarksModel()
+    protected function _getThreadmarksModelIfThreadmarksActive()
     {
-        if (!class_exists('Sidane_Threadmarks_Model_Threadmarks'))
+        if (!XenForo_Application::isRegistered('addOns'))
+        {
+            return false;
+        }
+
+        if (!array_key_exists('sidaneThreadmarks', XenForo_Application::get('addOns')))
         {
             return false;
         }

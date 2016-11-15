@@ -44,7 +44,7 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
             return true;
         }
 
-        if ($threadmarksModel = $this->_getThreadmarksModel())
+        if ($threadmarksModel = $this->_getThreadmarksModelIfThreadmarksActive())
         {
             if ($threadmarksModel->getByPostId($postId))
             {
@@ -70,7 +70,7 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         if ($wordcount !== null)
         {
             if ($wordcount >= SV_WordCountSearch_Globals::$wordCountThreshold)
-            {                
+            {
                 $db->query("
                     insert ignore into xf_post_words (post_id, word_count) values (?,?)
                 ", array($newPost['post_id'], $wordcount));
@@ -90,9 +90,14 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         return $this->getModelFromCache('XenForo_Model_Search');
     }
 
-    protected function _getThreadmarksModel()
+    protected function _getThreadmarksModelIfThreadmarksActive()
     {
-        if (!class_exists('Sidane_Threadmarks_Model_Threadmarks'))
+        if (!XenForo_Application::isRegistered('addOns'))
+        {
+            return false;
+        }
+
+        if (!array_key_exists('sidaneThreadmarks', XenForo_Application::get('addOns')))
         {
             return false;
         }

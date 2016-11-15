@@ -36,14 +36,18 @@ class SV_WordCountSearch_Installer
 
         if ($version < 1010000)
         {
-            $requireIndexing['thread'] = true;
-
-            XenForo_Application::defer(
-                'SV_WordCountSearch_Deferred_ThreadmarkWordCount',
-                array('position' => -1),
-                'ThreadmarkWordCount',
-                true
             );
+            if (self::addOnIsActive('sidaneThreadmarks'))
+            {
+                XenForo_Application::defer(
+                    'SV_WordCountSearch_Deferred_ThreadmarkWordCount',
+                    array('position' => -1),
+                    'ThreadmarkWordCount',
+                    true
+                );
+
+                $requireIndexing['thread'] = true;
+            }
         }
 
         // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
@@ -58,5 +62,17 @@ class SV_WordCountSearch_Installer
         $db->query("
             DROP TABLE IF EXISTS `xf_post_words`
         ");
+    }
+
+    public static function addOnIsActive($addOnId)
+    {
+        if (XenForo_Application::isRegistered('addOns')) {
+            return array_key_exists(
+                $addOnId,
+                XenForo_Application::get('addOns')
+            );
+        }
+
+        return false;
     }
 }
