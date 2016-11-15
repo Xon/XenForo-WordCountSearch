@@ -15,7 +15,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
             INNER JOIN xf_post ON (xf_post.post_id = threadmarks.post_id)
             LEFT JOIN xf_post_words ON (xf_post_words.post_id = threadmarks.post_id)
 			WHERE threadmarks.threadmark_id > ? AND xf_post_words.post_id IS NULL
-			ORDER BY threadmarks.post_id
+			ORDER BY threadmarks.threadmark_id
 		', $increment), $min_threadmark_id);
 
         if (empty($threadmarks))
