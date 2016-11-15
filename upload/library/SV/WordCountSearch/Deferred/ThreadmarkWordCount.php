@@ -41,7 +41,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $threadIds = array_unique(XenForo_Application::arrayColumn($threadmarks, 'thread_id'));
         foreach($threadIds as $threadId)
         {
-            $threadModel->invalidateThreadWordCountCacheEntry($threadId);
+            $threadModel->rebuildThreadWordCount($threadId);
         }
 
         $actionPhrase = new XenForo_Phrase('rebuilding');

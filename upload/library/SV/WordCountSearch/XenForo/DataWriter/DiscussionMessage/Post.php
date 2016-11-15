@@ -101,7 +101,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
             {
                 if ($threadmarksModel->getByPostId($this->get('post_id')))
                 {
-                    $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
+                    $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
                     $this->_updateThreadSearchIndex();
                 }
             }

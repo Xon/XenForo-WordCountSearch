@@ -11,6 +11,7 @@
     <listener event_id="load_class" execute_order="10" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_Model_Thread" description="XenForo_Model_Thread"/>
     <listener event_id="load_class" execute_order="10" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_Search_DataHandler_Thread" description="XenForo_Search_DataHandler_Thread"/>
     <listener event_id="load_class" execute_order="10" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="Sidane_Threadmarks_DataWriter_Threadmark" description="Sidane_Threadmarks_DataWriter_Threadmark"/>
+    <listener event_id="load_class" execute_order="10" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_DataWriter_Discussion_Thread" description="XenForo_DataWriter_Discussion_Thread"/>
     <listener event_id="load_class" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenES_Model_Elasticsearch" description="XenES_Model_Elasticsearch"/>
     <listener event_id="load_class" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenES_Search_SourceHandler_ElasticSearch" description="XenES_Search_SourceHandler_ElasticSearch"/>
     <listener event_id="load_class" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_Search_DataHandler_Post" description="XenForo_Search_DataHandler_Post"/>
@@ -79,8 +80,8 @@ $0]]></replace>
     </modification>
     <modification template="search_result_thread" modification_key="SV_WordCountSearch_search_result_thread_1" description="Inject Word count" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#\w*{xen:phrase thread_by}#si]]></find>
-      <replace><![CDATA[<xen:if is="{$post.WordCount}">
-{xen:phrase word_count}: <a class="wordcount">{$post.WordCount}</a>,
+      <replace><![CDATA[<xen:if is="{$thread.word_count}">
+{xen:phrase word_count}: <a class="wordcount">{$thread.word_count}</a>,
 </xen:if>
 $0]]></replace>
     </modification>

@@ -2,38 +2,8 @@
 
 class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_XenForo_Model_Thread
 {
-    /**
-     * The TTL for cached thread word count queries. Default is 4 hours.
-     */
-    const WORD_COUNT_CACHE_TTL = 14400;
-
-    public function invalidateThreadWordCountCacheEntry($threadId)
+    public function countThreadmarkWordsInThread($threadId)
     {
-        $cache = XenForo_Application::getCache();
-
-        if ($cache)
-        {
-            $cache->remove("SV_WordCountSearch_threadmarks_thread{$threadId}");
-        }
-    }
-
-    public function getThreadmarkWordCountByThread($threadId, $cache = true)
-    {
-        if ($cache)
-        {
-            if ($cache = XenForo_Application::getCache())
-            {
-                $cacheKey = "SV_WordCountSearch_threadmarks_thread{$threadId}";
-
-                $wordCount = $cache->load($cacheKey);
-
-                if ($wordCount)
-                {
-                    return $wordCount;
-                }
-            }
-        }
-
         $posts = $this->_getDb()->fetchAll("
             SELECT post_words.word_count
             FROM threadmarks
@@ -49,15 +19,17 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
             $wordCount += $post['word_count'];
         }
 
-        if ($cache)
-        {
-            $cache->save(
-                (string) $wordCount,
-                $cacheKey,
-                array(),
-                self::WORD_COUNT_CACHE_TTL
-            );
-        }
+        return $wordCount;
+    }
+
+    public function rebuildThreadWordCount($threadId)
+    {
+        $wordCount = $this->countThreadmarkWordsInThread($threadId);
+
+        $dw = XenForo_DataWriter::create('XenForo_DataWriter_Discussion_Thread');
+        $dw->setExistingData($threadId);
+        $dw->set('word_count', $wordCount);
+        $dw->save();
 
         return $wordCount;
     }

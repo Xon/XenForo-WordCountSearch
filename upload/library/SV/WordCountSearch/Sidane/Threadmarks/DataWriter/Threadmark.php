@@ -25,7 +25,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                     );
                 }
 
-                $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
+                $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
                 $this->_updateThreadSearchIndex();
             }
         }
@@ -38,7 +38,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                     $this->getExisting('message_state') === 'visible'
                 )
                 {
-                    $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
+                    $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
                     $this->_updateThreadSearchIndex();
                 }
             }
@@ -59,7 +59,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
             );
         }
 
-        $this->_getThreadModel()->invalidateThreadWordCountCacheEntry($this->get('thread_id'));
+        $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
         $this->_updateThreadSearchIndex();
     }
 

@@ -36,7 +36,13 @@ class SV_WordCountSearch_Installer
 
         if ($version < 1010000)
         {
+            \SV_Utils_Install::addColumn(
+                'xf_thread',
+                'word_count',
+                "int(10) unsigned
+                    DEFAULT NULL"
             );
+
             if (self::addOnIsActive('sidaneThreadmarks'))
             {
                 XenForo_Application::defer(

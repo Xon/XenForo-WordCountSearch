@@ -6,11 +6,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
     {
         $wordcount = 0;
 
-        if (!empty($data['threadmark_count']))
+        if (!empty($data['word_count']))
         {
-            $wordcount = $this->_getThreadModel()->getThreadmarkWordCountByThread(
-                $data['thread_id'],
-                false
+            $wordcount = $this->_getThreadModel()->rebuildThreadWordCount(
+                $data['thread_id']
             );
         }
 

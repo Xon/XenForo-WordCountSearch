@@ -18,9 +18,6 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
 
         $viewParams = &$response->params;
 
-        $threadId = $this->_input->filterSingle('thread_id', XenForo_Input::UINT);
-
-        $viewParams['thread']['word_count'] = $this->_getThreadModel()->getThreadmarkWordCountByThread($threadId);
         $viewParams['totalWordCount'] = $this-> _getSearchModel()->roundWordCount($viewParams['thread']['word_count']);
 
         return $response;
