@@ -6,8 +6,8 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
     {
         $wordcount = 0;
 
-        if (!empty($data['threadmark_count']) && empty($thread['word_count']) ||
-            empty($data['threadmark_count']) && !empty($thread['word_count']))
+        if (!empty($data['threadmark_count']) && empty($data['word_count']) ||
+            empty($data['threadmark_count']) && !empty($data['word_count']))
         {
             $wordcount = $this->_getThreadModel()->rebuildThreadWordCount(
                 $data['thread_id']
