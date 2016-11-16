@@ -18,17 +18,19 @@ class SV_WordCountSearch_XenForo_DataWriter_Discussion_Thread extends XFCP_SV_Wo
     {
         parent::rebuildDiscussionCounters($replyCount, $firstPostId, $lastPostId);
 
-        $wordCount = $this->_getThreadModel()->countThreadmarkWordsInThread($this->get('thread_id'));
-
-        $this->set('word_count', $wordCount);
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
+        {
+            $wordCount = $this->_getThreadModel()->countThreadmarkWordsInThread($this->get('thread_id'));
+            $this->set('word_count', $wordCount);
+        }
     }
 
     protected function _verifyWordCount($wordCount)
     {
-        if (!is_int($wordCount) && !is_null($wordCount)) {
-            return false;
+        if (is_int($wordCount) || is_null($wordCount)) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

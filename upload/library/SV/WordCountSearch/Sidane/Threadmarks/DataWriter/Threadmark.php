@@ -16,9 +16,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                 {
                     $wordCount = $this->_getSearchModel()->getTextWordCount($post['message']);
 
-                    $db = $this->_db;
-
-                    $db->query(
+                    $this->_db->query(
                         "INSERT IGNORE xf_post_words (post_id, word_count)
                             VALUES (?,?)",
                         array($this->get('post_id'), $wordCount)

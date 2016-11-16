@@ -20,9 +20,4 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
 
         return $fetchOptions;
     }
-
-    protected function _getSearchModel()
-    {
-        return $this->getModelFromCache('XenForo_Model_Search');
-    }
 }
