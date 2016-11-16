@@ -31,7 +31,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks extends XFCP_SV_Wo
     {
         if (!empty($threadmark['word_count']))
         {
-            $threadmark['WordCount'] = $this-> _getSearchModel()->roundWordCount($threadmark['word_count']);
+            $threadmark['WordCount'] = $this->_getSearchModel()->roundWordCount($threadmark['word_count']);
         }
         return parent::prepareThreadmark($threadmark, $thread, $forum, $nodePermissions, $viewingUser);
     }
