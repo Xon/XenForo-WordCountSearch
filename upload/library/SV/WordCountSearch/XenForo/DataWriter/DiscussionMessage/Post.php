@@ -129,12 +129,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
 
     protected function _getThreadmarksModelIfThreadmarksActive()
     {
-        if (!XenForo_Application::isRegistered('addOns'))
-        {
-            return false;
-        }
-
-        if (!array_key_exists('sidaneThreadmarks', XenForo_Application::get('addOns')))
+        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
         {
             return false;
         }

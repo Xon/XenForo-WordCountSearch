@@ -42,7 +42,7 @@ class SV_WordCountSearch_Installer
 
         if ($version < 1010001)
         {
-            if (self::addOnIsActive('sidaneThreadmarks'))
+            if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
             {
                 XenForo_Application::defer(
                     'SV_WordCountSearch_Deferred_ThreadmarkWordCount',
@@ -67,17 +67,5 @@ class SV_WordCountSearch_Installer
         $db->query("
             DROP TABLE IF EXISTS `xf_post_words`
         ");
-    }
-
-    public static function addOnIsActive($addOnId)
-    {
-        if (XenForo_Application::isRegistered('addOns')) {
-            return array_key_exists(
-                $addOnId,
-                XenForo_Application::get('addOns')
-            );
-        }
-
-        return false;
     }
 }
