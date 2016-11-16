@@ -25,10 +25,10 @@ class SV_WordCountSearch_XenForo_DataWriter_Discussion_Thread extends XFCP_SV_Wo
 
     protected function _verifyWordCount($wordCount)
     {
-        if (!is_int($wordCount) && !is_null($wordCount)) {
-            return false;
+        if (is_int($wordCount) || is_null($wordCount)) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
