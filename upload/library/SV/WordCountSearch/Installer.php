@@ -11,6 +11,12 @@ class SV_WordCountSearch_Installer
             throw new Exception("Require Enhanced Search to be installed and enabled");
         }
 
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks') &&
+            !SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
+        {
+            throw new Exception("Threadmarks support requires v1.3.0 or newer");
+        }
+
         $requireIndexing = array();
         if ($version == 0)
         {
@@ -42,7 +48,7 @@ class SV_WordCountSearch_Installer
 
         if ($version < 1010001)
         {
-            if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
+            if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
             {
                 XenForo_Application::defer(
                     'SV_WordCountSearch_Deferred_ThreadmarkWordCount',

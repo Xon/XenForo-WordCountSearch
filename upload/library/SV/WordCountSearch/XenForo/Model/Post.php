@@ -92,7 +92,7 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
 
     protected function _getThreadmarksModelIfThreadmarksActive()
     {
-        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
+        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
         {
             return false;
         }
