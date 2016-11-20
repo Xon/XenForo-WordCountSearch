@@ -73,5 +73,6 @@ class SV_WordCountSearch_Installer
         $db->query("
             DROP TABLE IF EXISTS `xf_post_words`
         ");
+        \SV_Utils_Install::dropColumn('xf_thread', 'word_count');
     }
 }
