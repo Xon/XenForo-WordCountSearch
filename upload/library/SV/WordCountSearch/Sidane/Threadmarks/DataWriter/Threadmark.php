@@ -61,12 +61,26 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
         $this->_updateThreadSearchIndex();
     }
 
+    protected function _getThreadData()
+    {
+        if (is_callable('parent::_getThreadData'))
+        {
+            return parent::_getThreadData();
+        }
+        if (!$thread = $this->getExtraData(self::DATA_THREAD))
+        {
+            $thread = $this->_getThreadModel()->getThreadById($this->get('thread_id'));
+            $this->setExtraData(self::DATA_THREAD, $thread);
+        }
+
+        return $thread;
+    }
+
     protected function _updateThreadSearchIndex()
     {
         $indexer = new XenForo_Search_Indexer();
-        $thread = $this->_getThreadModel()->getThreadById(
-            $this->get('thread_id')
-        );
+
+        $thread = $this->_getThreadData();
 
         $threadHandler = XenForo_Search_DataHandler_Abstract::create(
             'XenForo_Search_DataHandler_Thread'
