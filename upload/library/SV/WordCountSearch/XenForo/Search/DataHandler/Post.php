@@ -14,9 +14,9 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
 
     protected function _insertIntoIndex(XenForo_Search_Indexer $indexer, array $data, array $parentData = null)
     {
-        if (!isset($data[SV_WordCountSearch_Globals::WordCountField]))
+        $searchModel = $this->_getSearchModel();
+        if (!isset($data['word_count']))
         {
-            $searchModel = $this->_getSearchModel();
             $wordcount = $searchModel->getTextWordCount($data['message']);
             if ($wordcount >= $searchModel->getWordCountThreshold())
             {
@@ -25,11 +25,14 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
                     insert ignore into xf_post_words (post_id, word_count) values (?,?)
                 ", array($data['post_id'], $wordcount));
             }
-            $data[SV_WordCountSearch_Globals::WordCountField] = $wordcount;
+            $data['word_count'] = $wordcount;
         }
 
         $metadata = array();
-        $metadata[SV_WordCountSearch_Globals::WordCountField] = $data[SV_WordCountSearch_Globals::WordCountField];
+        if ($searchModel->pushWordCountInIndex())
+        {
+            $metadata['word_count'] = $data['word_count'];
+        }
 
         if ($indexer instanceof SV_SearchImprovements_Search_IndexerProxy)
         {

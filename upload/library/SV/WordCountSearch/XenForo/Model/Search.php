@@ -8,6 +8,11 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         return count(preg_split('~[^\p{L}\p{N}\']+~u',$str));
     }
 
+    public function pushWordCountInIndex()
+    {
+        return true;
+    }
+
     public function getWordCountThreshold()
     {
         return SV_WordCountSearch_Globals::$wordCountThreshold;

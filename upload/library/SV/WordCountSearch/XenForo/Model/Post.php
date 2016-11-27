@@ -23,15 +23,14 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
     {
         $post = parent::preparePost($post, $thread, $forum, $nodePermissions, $viewingUser);
 
-        $WordCountField = SV_WordCountSearch_Globals::WordCountField;
-        if (array_key_exists($WordCountField, $post))
+        if (array_key_exists('word_count', $post))
         {
             $searchModel = $this->_getSearchModel();
-            if ($post[$WordCountField] === null)
+            if ($post['word_count'] === null)
             {
-                $post[$WordCountField] = $searchModel->getTextWordCount($post['message']);
+                $post['word_count'] = $searchModel->getTextWordCount($post['message']);
             }
-            $post['WordCount'] = $searchModel->roundWordCount($post[$WordCountField]);
+            $post['WordCount'] = $searchModel->roundWordCount($post['word_count']);
         }
 
         return $post;
