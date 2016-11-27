@@ -24,7 +24,7 @@ class SV_WordCountSearch_Deferred_WordCountMigration extends XenForo_Deferred_Ab
 
 
         $searchModel = XenForo_Model::create('XenForo_Model_Search');
-        $wordCountThreshold = SV_WordCountSearch_Globals::$wordCountThreshold;
+        $wordCountThreshold = $searchModel->getWordCountThreshold();
         $min_post_id = false;
         foreach($posts as $post)
         {

@@ -37,24 +37,6 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         return $post;
     }
 
-    public function shouldRecordPostWordCount($postId, $wordCount)
-    {
-        if ($wordCount >= SV_WordCountSearch_Globals::$wordCountThreshold)
-        {
-            return true;
-        }
-
-        if ($threadmarksModel = $this->_getThreadmarksModelIfThreadmarksActive())
-        {
-            if ($threadmarksModel->getByPostId($postId))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     protected function _copyPost(array $post, array $targetThread, array $forum)
     {
         $wordcount = null;
@@ -69,7 +51,7 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         $db = XenForo_Application::getDb();
         if ($wordcount !== null)
         {
-            if ($wordcount >= SV_WordCountSearch_Globals::$wordCountThreshold)
+            if ($wordcount >= $this->_getSearchModel()->getWordCountThreshold())
             {
                 $db->query("
                     insert ignore into xf_post_words (post_id, word_count) values (?,?)
@@ -81,7 +63,7 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
             $db = XenForo_Application::getDb();
             $db->query("
                 insert ignore into xf_post_words (post_id, word_count) select ?, word_count from xf_post_words where post_id = ? and word_count >= ?
-            ", array($newPost['post_id'], $post['post_id'], SV_WordCountSearch_Globals::$wordCountThreshold));
+            ", array($newPost['post_id'], $post['post_id'], $this->_getSearchModel()->getWordCountThreshold()));
         }
     }
 
@@ -90,13 +72,4 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         return $this->getModelFromCache('XenForo_Model_Search');
     }
 
-    protected function _getThreadmarksModelIfThreadmarksActive()
-    {
-        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
-        {
-            return false;
-        }
-
-        return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
-    }
 }

@@ -49,7 +49,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
 
         $post = $this->_getPostModel()->getPostById($this->get('post_id'));
 
-        if ($post['word_count'] < SV_WordCountSearch_Globals::$wordCountThreshold)
+        if ($post['word_count'] < $this->_getSearchModel()->getWordCountThreshold())
         {
             $this->_db->delete(
                 'xf_post_words',
