@@ -8,13 +8,40 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         return count(preg_split('~[^\p{L}\p{N}\']+~u',$str));
     }
 
+    static $hasElasticSearch = null;
+    static $hasMySQLSearch = null;
+
+    public function hasRangeQuery()
+    {
+        if(self::$hasElasticSearch === null)
+        {
+            self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
+            self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
+        }
+        return  self::$hasElasticSearch || self::$hasMySQLSearch;
+    }
+
     public function pushWordCountInIndex()
     {
-        return true;
+        if(self::$hasElasticSearch === null)
+        {
+            self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
+            self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
+        }
+        return self::$hasElasticSearch;
     }
 
     public function getWordCountThreshold()
     {
+        if(self::$hasElasticSearch === null)
+        {
+            self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
+            self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
+        }
+        if (self::$hasMySQLSearch)
+        {
+            return 0;
+        }
         return SV_WordCountSearch_Globals::$wordCountThreshold;
     }
 
@@ -65,16 +92,30 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         return $ApproximateWordCount;
     }
 
+    protected function _getController()
+    {
+        if (!empty(SV_WordCountSearch_Globals::$SearchController))
+        {
+            return SV_WordCountSearch_Globals::$SearchController;
+        }
+        if (!empty(SV_SearchImprovements_Globals::$SearchController))
+        {
+            return SV_SearchImprovements_Globals::$SearchController;
+        }
+        return null;
+    }
+
     public function getGeneralConstraintsFromInput(array $input, &$errors = null)
     {
         $constraints = parent::getGeneralConstraintsFromInput($input, $errors);
 
-        if (empty(SV_SearchImprovements_Globals::$SearchController))
+        $controller = $this->_getController();
+        if (!$controller)
         {
             return $constraints;
         }
 
-        $input2 = SV_SearchImprovements_Globals::$SearchController->getInput()->filter(array(
+        $input2 = $controller->getInput()->filter(array(
             'word_count' => XenForo_Input::ARRAY_SIMPLE,
         ));
 

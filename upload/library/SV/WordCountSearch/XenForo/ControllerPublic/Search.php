@@ -4,6 +4,7 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Search extends XFCP_SV_WordCou
 {
     public function actionIndex()
     {
+        SV_WordCountSearch_Globals::$SearchController = $this;
         $response = parent::actionIndex();
 
         if ($response instanceof XenForo_ControllerResponse_View)
@@ -23,9 +24,15 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Search extends XFCP_SV_WordCou
                     $response->params['search']['word_count']['upper'] = $params['c']['word_count'][1];
                 }
             }
-            $response->params['search']['range_query'] = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);    
+            $response->params['search']['range_query'] = $this->_getSearchModel()->hasRangeQuery();
         }
 
         return $response;
+    }
+
+    public function actionSearch()
+    {
+        SV_WordCountSearch_Globals::$SearchController = $this;
+        return parent::actionSearch();
     }
 }
