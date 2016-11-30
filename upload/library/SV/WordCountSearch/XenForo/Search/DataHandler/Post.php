@@ -2,6 +2,16 @@
 
 class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCountSearch_XenForo_Search_DataHandler_Post
 {
+    public function getCustomMapping(array $mapping = array())
+    {
+        if (is_callable('parent::getCustomMapping'))
+        {
+            $mapping = parent::getCustomMapping($mapping);
+        }
+        $mapping['properties']['word_count'] = array("type" => "long");
+        return $mapping;
+    }
+
     protected function _insertIntoIndex(XenForo_Search_Indexer $indexer, array $data, array $parentData = null)
     {
         if (!isset($data[SV_WordCountSearch_Globals::WordCountField]))

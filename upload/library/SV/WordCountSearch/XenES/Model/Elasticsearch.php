@@ -2,35 +2,6 @@
 
 class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSearch_XenES_Model_Elasticsearch
 {
-    public function getOptimizableMappingFor($type)
-    {
-        switch($type)
-        {
-            case 'post':
-                $mapping = array(
-                    "properties" => array(
-                        "word_count" => array("type" => "long"),
-                    )
-                );
-                break;
-            case 'thread':
-                $mapping = array(
-                    "properties" => array(
-                        "word_count" => array("type" => "long"),
-                    )
-                );
-                break;
-            default:
-                $mapping = array();
-                break;
-        }
-        if (is_callable('parent::getOptimizableMappingFor'))
-        {
-            $mapping = array_merge(parent::getOptimizableMappingFor($type), $mapping);
-        }
-        return $mapping;
-    }
-
     // copied from XenES_Model_Elasticsearch, as it isn't extendable
     public function getOptimizableMappings(array $mappingTypes = null, $mappings = null)
     {
@@ -44,6 +15,7 @@ class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSear
         }
 
         $optimizable = array();
+        $searchContentTypes = XenForo_Model::create('XenForo_Model_Search')->getSearchDataHandlers();
 
         foreach ($mappingTypes AS $type)
         {
@@ -54,7 +26,11 @@ class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSear
             else
             {
                 // our change
-                $expectedMapping = array_merge(static::$optimizedGenericMapping, $this->getOptimizableMappingFor($type));
+                $expectedMapping = static::$optimizedGenericMapping;
+                if (isset($searchContentTypes[$type]) && is_callable(array($searchContentTypes[$type], 'getCustomMapping')))
+                {
+                    $expectedMapping = $searchContentTypes[$type]->getCustomMapping( $expectedMapping);
+                }
                 $optimize = $this->_verifyMapping($mappings->$type, $expectedMapping);
             }
 
@@ -69,6 +45,30 @@ class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSear
 
     public function optimizeMapping($type, $deleteFirst = true, array $extra = array())
     {
-        parent::optimizeMapping($type, $deleteFirst, array_merge($extra, $this->getOptimizableMappingFor($type)));
+        $extra = XenForo_Application::mapMerge(static::$optimizedGenericMapping, $extra);
+        $handler = XenForo_Model::create('XenForo_Model_Search')->getSearchDataHandler($type);
+        if (isset($handler) && is_callable(array($handler, 'getCustomMapping')))
+        {
+            $extra = $handler->getCustomMapping($extra);
+        }
+        parent::optimizeMapping($type, $deleteFirst, $extra);
+    }
+
+    protected $hasOptimizedIndex = false;
+    public function recreateIndex()
+    {
+        parent::recreateIndex();
+        if (!$this->hasOptimizedIndex)
+        {
+            $this->hasOptimizedIndex = true;
+            $handlers = XenForo_Model::create('XenForo_Model_Search')->getSearchDataHandlers();
+            foreach($handlers as $type => $handler)
+            {
+                if (is_callable(array($handler, 'getCustomMapping')))
+                {
+                    $this->optimizeMapping($type, true);
+                }
+            }
+        }
     }
 }
