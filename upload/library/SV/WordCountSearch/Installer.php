@@ -61,6 +61,11 @@ class SV_WordCountSearch_Installer
             }
         }
 
+        if ($version >= 1010000 && $version < 1010200)
+        {
+            $requireIndexing['thread'] = true;
+        }
+
         // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
         // requires overriding XenES_Model_Elasticsearch
         SV_Utils_Deferred_Search::SchemaUpdates($requireIndexing);
