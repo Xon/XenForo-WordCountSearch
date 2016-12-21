@@ -4,6 +4,11 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
 {
     public function countThreadmarkWordsInThread($threadId)
     {
+        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
+        {
+            return 0;
+        }
+
         $posts = $this->_getDb()->fetchAll("
             SELECT post_words.word_count
             FROM threadmarks

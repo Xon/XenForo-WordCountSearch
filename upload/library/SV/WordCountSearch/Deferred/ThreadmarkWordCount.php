@@ -4,6 +4,10 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 {
     public function execute(array $deferred, array $data, $targetRunTime, &$status)
     {
+        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
+        {
+            return false;
+        }
         $increment = isset($data['batch']) ? $data['batch'] : 1000;
         $min_threadmark_id = isset($data['position']) ? $data['position'] : -1;
 

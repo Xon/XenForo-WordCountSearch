@@ -16,7 +16,10 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
     {
         $fetchOptions = parent::_getThreadmarkFetchOptions();
 
-        $fetchOptions['join'] |= SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks::FETCH_WORD_COUNT;
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
+        {
+            $fetchOptions['join'] |= SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks::FETCH_WORD_COUNT;
+        }
 
         return $fetchOptions;
     }
