@@ -15,10 +15,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
     protected function _insertIntoIndex(XenForo_Search_Indexer $indexer, array $data, array $parentData = null)
     {
         $searchModel = $this->_getSearchModel();
-        $wordcount = 0;
+        $wordcount = empty($data['word_count']) ? 0 : intval($data['word_count']);
 
-        if (!empty($data['threadmark_count']) && empty($data['word_count']) ||
-            empty($data['threadmark_count']) && !empty($data['word_count']))
+        if (!empty($data['threadmark_count']) && !$wordcount ||
+            empty($data['threadmark_count']) && $wordcount)
         {
             $wordcount = $this->_getThreadModel()->rebuildThreadWordCount(
                 $data['thread_id']
