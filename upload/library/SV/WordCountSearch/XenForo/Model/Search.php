@@ -43,7 +43,11 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
 
     public function roundWordCount($WordCount)
     {
-        $ApproximateWordCount = $WordCount;
+        $ApproximateWordCount = intval($WordCount);
+        if (!$ApproximateWordCount)
+        {
+            return 0;
+        }
         if ($ApproximateWordCount > 1000000)
             $ApproximateWordCount = round($ApproximateWordCount / 1000000, 1) . 'm';
         else if ($ApproximateWordCount > 100000)
