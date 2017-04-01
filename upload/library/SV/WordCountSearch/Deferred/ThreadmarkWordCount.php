@@ -4,7 +4,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 {
     public function execute(array $deferred, array $data, $targetRunTime, &$status)
     {
-        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
+        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks') || !SV_Utils_AddOn::addOnIsActive('SV_WordCountSearch'))
         {
             return false;
         }
@@ -12,6 +12,11 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $min_threadmark_id = isset($data['position']) ? $data['position'] : -1;
 
         $db = XenForo_Application::getDb();
+
+		if (!$db->fetchRow("SHOW TABLES LIKE 'xf_post_words'"))
+		{
+			return false;
+		}
 
         $threadmarks = $db->fetchAll($db->limit('
             SELECT threadmarks.threadmark_id, threadmarks.post_id, xf_post.message, xf_post.thread_id

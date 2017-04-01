@@ -4,10 +4,19 @@ class SV_WordCountSearch_Deferred_WordCountMigration extends XenForo_Deferred_Ab
 {
     public function execute(array $deferred, array $data, $targetRunTime, &$status)
     {
+        if (!SV_Utils_AddOn::addOnIsActive('SV_WordCountSearch'))
+        {
+            return false;
+        }
         $increment = 1000;
         $min_post_id = isset($data['position']) ? $data['position'] : -1;
 
         $db = XenForo_Application::getDb();
+
+		if (!$db->fetchRow("SHOW TABLES LIKE 'xf_post_words'"))
+		{
+			return false;
+		}
 
         $posts = $db->fetchAll($db->limit('
 			SELECT xf_post.post_id, xf_post.message
