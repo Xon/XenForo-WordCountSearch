@@ -12,9 +12,9 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
         return $postFetchOptions;
     }
 
-    protected function _getThreadmarkFetchOptions()
+    protected function _getThreadmarkFetchOptions(array $thread = null)
     {
-        $fetchOptions = parent::_getThreadmarkFetchOptions();
+        $fetchOptions = parent::_getThreadmarkFetchOptions($thread);
 
         if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
         {
