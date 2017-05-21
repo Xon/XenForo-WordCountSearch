@@ -26,7 +26,7 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
         }
 
         $metadata = array();
-        if ($searchModel->pushWordCountInIndex())
+        if ($searchModel->pushWordCountInIndex() && $wordcount > 0)
         {
             $metadata['word_count'] = $wordcount;
         }

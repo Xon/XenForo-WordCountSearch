@@ -18,14 +18,22 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 			return false;
 		}
 
+        $args = array($min_threadmark_id);
+        $sql = '';
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1050015))
+        {
+            $sql = ' AND threadmarks.threadmark_category_id = ? ';
+            $args[] = 1; // only count the 1st threadmark type, hardcode for now
+        }
+
         $threadmarks = $db->fetchAll($db->limit('
             SELECT threadmarks.threadmark_id, threadmarks.post_id, xf_post.message, xf_post.thread_id
             FROM threadmarks
             INNER JOIN xf_post ON (xf_post.post_id = threadmarks.post_id)
             LEFT JOIN xf_post_words ON (xf_post_words.post_id = threadmarks.post_id)
-            WHERE threadmarks.threadmark_id > ? AND xf_post_words.post_id IS NULL
+            WHERE threadmarks.threadmark_id > ? AND xf_post_words.post_id IS NULL ' . $sql . '
             ORDER BY threadmarks.threadmark_id
-        ', $increment), $min_threadmark_id);
+        ', $increment), $args);
 
         if (empty($threadmarks))
         {

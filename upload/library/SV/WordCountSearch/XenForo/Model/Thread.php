@@ -9,22 +9,24 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
             return 0;
         }
 
-        $posts = $this->_getDb()->fetchAll("
-            SELECT post_words.word_count
+        $args = array($threadId);
+        $sql = '';
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1050015))
+        {
+            $sql = ' AND threadmarks.threadmark_category_id = ? ';
+            $args[] = 1; // only count the 1st threadmark type, hardcode for now
+        }
+
+        $wordCount = $this->_getDb()->fetchOne("
+            SELECT sum(post_words.word_count)
             FROM threadmarks
             INNER JOIN xf_post_words AS post_words ON
                 (post_words.post_id = threadmarks.post_id)
-            WHERE threadmarks.thread_id = ?
+            WHERE threadmarks.thread_id = ? {$sql}
                 AND threadmarks.message_state = 'visible'
-        ", $threadId);
+        ", $args);
 
-        $wordCount = 0;
-        foreach ($posts as $post)
-        {
-            $wordCount += $post['word_count'];
-        }
-
-        return $wordCount;
+        return intval($wordCount);
     }
 
     public function rebuildThreadWordCount($threadId)
