@@ -29,7 +29,7 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
         }
 
         $metadata = array();
-        if ($searchModel->pushWordCountInIndex() && $wordCount > 0)
+        if ($searchModel->pushWordCountInIndex() && $data['word_count'] > 0)
         {
             $metadata['word_count'] = $data['word_count'];
         }
