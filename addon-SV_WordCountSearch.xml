@@ -102,7 +102,11 @@ $0]]></replace>
     </modification>
     <modification template="threadmarks" modification_key="SV_WordCountSearch_threadmarks_total_count" description="Adds total word count to Threadmarks index" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<div class="sectionFooter overlayOnly"><a class="button primary OverlayCloser">{xen:phrase close}</a></div>]]></find>
-      <replace><![CDATA[<div class="sectionFooter"><xen:if is="{$thread.WordCount}">{xen:phrase word_count}: {$thread.WordCount}</xen:if> <a class="button primary overlayOnly OverlayCloser">{xen:phrase close}</a></div>]]></replace>
+      <replace><![CDATA[<div class="sectionFooter"><xen:if is="{$thread.WordCount}">&nbsp;{xen:phrase word_count}: {$thread.WordCount}</xen:if> <a class="button primary overlayOnly OverlayCloser">{xen:phrase close}</a></div>]]></replace>
+    </modification>
+    <modification template="threadmarks" modification_key="SV_WordCountSearch_threadmarks_total_count2" description="Adds total word count to Threadmarks index2" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<span class="statsSecondary">.*?)(</span>)#si]]></find>
+      <replace><![CDATA[$1<xen:if is="{$thread.WordCount}">, {xen:phrase word_count}: {$thread.WordCount}</xen:if>$2]]></replace>
     </modification>
   </public_template_modifications>
   <bb_code_media_sites/>
