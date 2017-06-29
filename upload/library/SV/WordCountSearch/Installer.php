@@ -39,6 +39,11 @@ class SV_WordCountSearch_Installer
             "int(10) unsigned
                 DEFAULT NULL"
         );
+        \SV_Utils_Install::addIndex(
+            'xf_thread',
+            'word_count',
+            array('word_count', 'last_post_date')
+        );
 
         if ($version < 1000703)
         {

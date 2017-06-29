@@ -50,6 +50,29 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
         return parent::prepareThread($thread, $forum, $nodePermissions, $viewingUser);
     }
 
+    public function prepareThreadFetchOptions(array $fetchOptions)
+    {
+        $joinOptions = parent::prepareThreadFetchOptions($fetchOptions);
+
+        if (!empty($fetchOptions['order']) && $fetchOptions['order'] === 'word_count')
+        {
+            $orderBy = 'thread.word_count';
+            $orderBySecondary = ', thread.last_post_date DESC';
+            if (!isset($fetchOptions['orderDirection']) || $fetchOptions['orderDirection'] == 'desc')
+            {
+                $orderBy .= ' DESC';
+            }
+            else
+            {
+                $orderBy .= ' ASC';
+            }
+            $orderBy .= $orderBySecondary;
+            $joinOptions['orderClause'] = ($orderBy ? "ORDER BY $orderBy" : '');
+        }
+
+        return $joinOptions;
+    }
+
     public function prepareThreadConditions(array $conditions, array &$fetchOptions)
     {
         $sql = parent::prepareThreadConditions($conditions, $fetchOptions);

@@ -19,6 +19,13 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Forum extends XFCP_SV_WordCoun
 
         return $displayConditions;
     }
+
+    protected function _getThreadSortFields(array $forum)
+    {
+        $fields = parent::_getThreadSortFields($forum);
+        $fields[] = 'word_count';
+        return $fields;
+    }
 }
 
 // ******************** FOR IDE AUTO COMPLETE ********************
