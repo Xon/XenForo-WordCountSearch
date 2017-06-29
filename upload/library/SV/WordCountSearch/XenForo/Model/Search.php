@@ -21,7 +21,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
             self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
             self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
         }
-        return  self::$hasElasticSearch || self::$hasMySQLSearch;
+        return  self::$hasElasticSearch ;//|| self::$hasMySQLSearch;
     }
 
     public function pushWordCountInIndex()
