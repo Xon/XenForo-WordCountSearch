@@ -102,7 +102,9 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
             {
                 if ($threadmarksModel->getByPostId($this->get('post_id')))
                 {
-                    $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
+                    /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+                    $threadModel = $this->_getThreadModel();
+                    $threadModel->rebuildThreadWordCount($this->get('thread_id'));
                     $this->_updateThreadSearchIndex();
                 }
             }
@@ -123,18 +125,30 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         $threadHandler->insertIntoIndex($indexer, $thread);
     }
 
+    /**
+     * @return SV_WordCountSearch_XenForo_Model_Search
+     */
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
     }
 
+    /**
+     * @return SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks
+     */
     protected function _getThreadmarksModelIfThreadmarksActive()
     {
         if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
         {
-            return false;
+            return null;
         }
 
         return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
     }
+}
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XenForo_DataWriter_DiscussionMessage_Post {}
 }

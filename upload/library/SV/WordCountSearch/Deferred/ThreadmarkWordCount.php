@@ -40,7 +40,9 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
             return false;
         }
 
+        /** @var SV_WordCountSearch_XenForo_Model_Search $searchModel */
         $searchModel = XenForo_Model::create('XenForo_Model_Search');
+        /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
         $threadModel = XenForo_Model::create('XenForo_Model_Thread');
         $min_threadmark_id = false;
 

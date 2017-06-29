@@ -6,6 +6,8 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
     {
         parent::_postSaveAfterTransaction();
 
+        /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+        $threadModel = $this->_getThreadModel();
         if ($this->isInsert())
         {
             if ($this->get('message_state') == 'visible')
@@ -23,7 +25,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                     );
                 }
 
-                $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
+                $threadModel->rebuildThreadWordCount($this->get('thread_id'));
                 $this->_updateThreadSearchIndex();
             }
         }
@@ -36,7 +38,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
                     $this->getExisting('message_state') === 'visible'
                 )
                 {
-                    $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
+                    $threadModel->rebuildThreadWordCount($this->get('thread_id'));
                     $this->_updateThreadSearchIndex();
                 }
             }
@@ -57,7 +59,9 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
             );
         }
 
-        $this->_getThreadModel()->rebuildThreadWordCount($this->get('thread_id'));
+        /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+        $threadModel = $this->_getThreadModel();
+        $threadModel->rebuildThreadWordCount($this->get('thread_id'));
         $this->_updateThreadSearchIndex();
     }
 
@@ -69,7 +73,9 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
         }
         if (!$thread = $this->getExtraData(self::DATA_THREAD))
         {
-            $thread = $this->_getThreadModel()->getThreadById($this->get('thread_id'));
+            /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+            $threadModel = $this->_getThreadModel();
+            $thread = $threadModel->getThreadById($this->get('thread_id'));
             $this->setExtraData(self::DATA_THREAD, $thread);
         }
 
@@ -89,13 +95,25 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
         $threadHandler->insertIntoIndex($indexer, $thread);
     }
 
+    /**
+     * @return SV_WordCountSearch_XenForo_Model_Post
+     */
     protected function _getPostModel()
     {
         return $this->getModelFromCache('XenForo_Model_Post');
     }
 
+    /**
+     * @return SV_WordCountSearch_XenForo_Model_Search
+     */
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
     }
+}
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends Sidane_Threadmarks_DataWriter_Threadmark {}
 }

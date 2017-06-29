@@ -20,7 +20,9 @@ class SV_WordCountSearch_XenForo_DataWriter_Discussion_Thread extends XFCP_SV_Wo
 
         if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
         {
-            $wordCount = $this->_getThreadModel()->countThreadmarkWordsInThread($this->get('thread_id'));
+            /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+            $threadModel = $this->_getThreadModel();
+            $wordCount = $threadModel->countThreadmarkWordsInThread($this->get('thread_id'));
             $this->set('word_count', $wordCount);
         }
     }
@@ -33,4 +35,10 @@ class SV_WordCountSearch_XenForo_DataWriter_Discussion_Thread extends XFCP_SV_Wo
 
         return false;
     }
+}
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_DataWriter_Discussion_Thread extends XenForo_DataWriter_Discussion_Thread {}
 }

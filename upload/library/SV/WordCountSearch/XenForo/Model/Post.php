@@ -38,26 +38,26 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
 
     protected function _copyPost(array $post, array $targetThread, array $forum)
     {
-        $wordcount = null;
+        $wordCount = null;
         if (array_key_exists('word_count', $post))
         {
-            $wordcount = $post['word_count'];
+            $wordCount = $post['word_count'];
             unset($post['word_count']);
         }
 
         $newPost = parent::_copyPost($post, $targetThread, $forum);
 
         $db = XenForo_Application::getDb();
-        if ($wordcount !== null)
+        if ($wordCount !== null)
         {
-            if ($wordcount >= $this->_getSearchModel()->getWordCountThreshold())
+            if ($wordCount >= $this->_getSearchModel()->getWordCountThreshold())
             {
                 $db->query("
                     insert ignore into xf_post_words (post_id, word_count) values (?,?)
-                ", array($newPost['post_id'], $wordcount));
+                ", array($newPost['post_id'], $wordCount));
             }
         }
-        else if ($wordcount === null)
+        else if ($wordCount === null)
         {
             $db = XenForo_Application::getDb();
             $db->query("
@@ -73,4 +73,10 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
     {
         return $this->getModelFromCache('XenForo_Model_Search');
     }
+}
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_Model_Post extends XenForo_Model_Post {}
 }

@@ -72,3 +72,9 @@ class SV_WordCountSearch_XenES_Model_Elasticsearch extends XFCP_SV_WordCountSear
         }
     }
 }
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenES_Model_Elasticsearch extends XenES_Model_Elasticsearch {}
+}

@@ -93,6 +93,9 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         return $ApproximateWordCount;
     }
 
+    /**
+     * @return SV_WordCountSearch_XenForo_ControllerPublic_Search
+     */
     protected function _getController()
     {
         if (!empty(SV_WordCountSearch_Globals::$SearchController))
@@ -158,5 +161,11 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
 
         return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
     }
+}
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_Model_SEarch extends XenForo_Model_Search {}
 }
 

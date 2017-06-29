@@ -19,13 +19,10 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Forum extends XFCP_SV_WordCoun
 
         return $displayConditions;
     }
-
-	/**
-	 * @return SV_WordCountSearch_XenForo_Model_Search
-	 */
-    protected function _getSearchModel()
-    {
-        return $this->getModelFromCache('XenForo_Model_Search');
-    }
 }
 
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_ControllerPublic_Forum extends XenForo_ControllerPublic_Forum {}
+}

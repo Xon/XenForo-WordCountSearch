@@ -82,3 +82,9 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
         return $this->getModelFromCache('XenForo_Model_Search');
     }
 }
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_Model_Thread extends XenForo_Model_Thread {}
+}

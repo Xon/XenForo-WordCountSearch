@@ -31,3 +31,9 @@ class SV_WordCountSearch_XenES_Search_SourceHandler_ElasticSearch extends XFCP_S
         return $processed + parent::processConstraints($constraints, $typeHandler);
     }
 }
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenES_Search_SourceHandler_ElasticSearch extends XenES_Search_SourceHandler_ElasticSearch {}
+}

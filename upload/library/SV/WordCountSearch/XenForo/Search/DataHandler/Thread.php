@@ -15,20 +15,22 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
     protected function _insertIntoIndex(XenForo_Search_Indexer $indexer, array $data, array $parentData = null)
     {
         $searchModel = $this->_getSearchModel();
-        $wordcount = empty($data['word_count']) ? 0 : intval($data['word_count']);
+        $wordCount = empty($data['word_count']) ? 0 : intval($data['word_count']);
 
-        if (!empty($data['threadmark_count']) && !$wordcount ||
-            empty($data['threadmark_count']) && $wordcount)
+        if (!empty($data['threadmark_count']) && !$wordCount ||
+            empty($data['threadmark_count']) && $wordCount)
         {
-            $wordcount = $this->_getThreadModel()->rebuildThreadWordCount(
+            /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+            $threadModel = $this->_getThreadModel();
+            $wordCount = $threadModel->rebuildThreadWordCount(
                 $data['thread_id']
             );
         }
 
         $metadata = array();
-        if ($searchModel->pushWordCountInIndex() && $wordcount > 0)
+        if ($searchModel->pushWordCountInIndex() && $wordCount > 0)
         {
-            $metadata['word_count'] = $wordcount;
+            $metadata['word_count'] = $wordCount;
         }
 
         if ($indexer instanceof SV_SearchImprovements_Search_IndexerProxy)
@@ -53,7 +55,13 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
         return parent::quickIndex($indexer, $contentIds);
     }
 
+    /**
+     * @var SV_WordCountSearch_XenForo_Model_Search
+     */
     protected $_searchModel = null;
+    /**
+     * @return SV_WordCountSearch_XenForo_Model_Search
+     */
     protected function _getSearchModel()
     {
         if (!$this->_searchModel)
@@ -63,4 +71,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
 
         return $this->_searchModel;
     }
+}
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XenForo_Search_DataHandler_Thread {}
 }

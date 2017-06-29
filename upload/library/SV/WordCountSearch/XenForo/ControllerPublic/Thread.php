@@ -24,3 +24,9 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
         return $fetchOptions;
     }
 }
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_ControllerPublic_Thread extends Sidane_Threadmarks_XenForo_ControllerPublic_Thread {}
+}

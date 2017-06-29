@@ -175,3 +175,9 @@ class SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt extends XFCP_SV_Wo
         return $processed + parent::processConstraints($constraints, $typeHandler);
     }
 }
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt extends XenForo_Search_SourceHandler_MySqlFt {}
+}

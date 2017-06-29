@@ -41,3 +41,9 @@ class SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks extends XFCP_SV_Wo
         return $this->getModelFromCache('XenForo_Model_Search');
     }
 }
+
+// ******************** FOR IDE AUTO COMPLETE ********************
+if (false)
+{
+    class XFCP_SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks extends Sidane_Threadmarks_Model_Threadmarks {}
+}
