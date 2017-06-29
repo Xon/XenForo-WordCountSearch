@@ -50,6 +50,33 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
         return parent::prepareThread($thread, $forum, $nodePermissions, $viewingUser);
     }
 
+    public function prepareThreadConditions(array $conditions, array &$fetchOptions)
+    {
+        $sql = parent::prepareThreadConditions($conditions, $fetchOptions);
+
+        $sqlConditions = array($sql);
+
+        if (isset($conditions['lword']) && ($value = intval($conditions['lword'])))
+        {
+            $sqlConditions[] = ' thread.word_count >= ' . $value;
+        }
+
+        if (isset($conditions['uword']) && ($value = intval($conditions['uword'])))
+        {
+            $sqlConditions[] = ' thread.word_count <= ' . $value;
+        }
+
+        if (count($sqlConditions) == 1)
+        {
+            return $sql;
+        }
+
+        return $this->getConditionsForClause($sqlConditions);
+    }
+
+	/**
+	 * @return SV_WordCountSearch_XenForo_Model_Search
+	 */
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');

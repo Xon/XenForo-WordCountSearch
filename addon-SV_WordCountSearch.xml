@@ -13,6 +13,7 @@
     <listener event_id="load_class" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_Search_SourceHandler_MySqlFt" description="XenForo_Search_SourceHandler_MySqlFt"/>
     <listener event_id="load_class_controller" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Search" description="XenForo_ControllerPublic_Search"/>
     <listener event_id="load_class_controller" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Thread" description="XenForo_ControllerPublic_Thread"/>
+    <listener event_id="load_class_controller" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_ControllerPublic_Forum" description="XenForo_ControllerPublic_Forum"/>
     <listener event_id="load_class_datawriter" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_DataWriter_DiscussionMessage_Post" description="XenForo_DataWriter_DiscussionMessage_Post"/>
     <listener event_id="load_class_datawriter" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="Sidane_Threadmarks_DataWriter_Threadmark" description="Sidane_Threadmarks_DataWriter_Threadmark"/>
     <listener event_id="load_class_datawriter" execute_order="4763" callback_class="SV_WordCountSearch_Listener" callback_method="load_class" active="1" hint="XenForo_DataWriter_Discussion_Thread" description="XenForo_DataWriter_Discussion_Thread"/>
@@ -32,6 +33,8 @@
     <interface_groups/>
   </permissions>
   <phrases>
+    <phrase title="less_than_x_word_count" version_id="1020000" version_string="1.2.0"><![CDATA[>= {words} words]]></phrase>
+    <phrase title="more_than_x_word_count" version_id="1020000" version_string="1.2.0"><![CDATA[<= {words} words]]></phrase>
     <phrase title="word_count" version_id="1000000" version_string="1.0.0"><![CDATA[Word Count]]></phrase>
     <phrase title="word_count_lower_bound" version_id="1000000" version_string="1.0.0"><![CDATA[Lower bound]]></phrase>
     <phrase title="word_count_upper_bound" version_id="1000000" version_string="1.0.0"><![CDATA[Upper bound]]></phrase>
@@ -47,6 +50,20 @@
 			<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="word_count[upper]" value="{$search.word_count.upper}" class="textCtrl" id="ctrl_word_count_upper" />
 		</dd>
 	</dl>
+</xen:if>]]></template>
+    <template title="SV_WordCountSearch_thread_list" version_id="1020000" version_string="1.2.0"><![CDATA[<div class="controlGroup">
+	<label for="ctrl_word_count_lower">{xen:phrase word_count}:
+	<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="lword" value="{$displayConditions.lword}" class="textCtrl" id="ctrl_word_count_lower" /> - 
+	<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="uword" value="{$displayConditions.uword}" class="textCtrl" id="ctrl_word_count_upper" />
+</div>]]></template>
+    <template title="SV_WordCountSearch_thread_list_filters" version_id="1020000" version_string="1.2.0"><![CDATA[<xen:if is="{$displayConditions.lword} || {$displayConditions.uword}">
+	<dt>{xen:phrase word_count}:</dt>
+	<xen:if is="{$displayConditions.lword}">
+		<dd><a href="{xen:link forums, $forum, '_params={$pageNavParams}', 'lword='}" class="removeFilter Tooltip" title="{xen:phrase remove_filter}">{xen:phrase less_than_x_word_count, 'words={$displayConditions.lword}'} <span class="gadget">x</span></a></dd>
+	</xen:if>
+	<xen:if is="{$displayConditions.uword}">
+		<dd><a href="{xen:link forums, $forum, '_params={$pageNavParams}', 'uword='}" class="removeFilter Tooltip" title="{xen:phrase remove_filter}">{xen:phrase more_than_x_word_count, 'words={$displayConditions.uword}'} <span class="gadget">x</span></a></dd>
+	</xen:if>
 </xen:if>]]></template>
   </templates>
   <public_template_modifications>
@@ -107,6 +124,16 @@ $0]]></replace>
     <modification template="threadmarks" modification_key="SV_WordCountSearch_threadmarks_total_count2" description="Adds total word count to Threadmarks index2" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#(<span class="statsSecondary">.*?)(</span>)#si]]></find>
       <replace><![CDATA[$1<xen:if is="{$thread.WordCount}">, {xen:phrase word_count}: {$thread.WordCount}</xen:if>$2]]></replace>
+    </modification>
+    <modification template="thread_list" modification_key="thread_list_word_count" description="Add word-count filtering options" execution_order="4763" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<xen:hook name="thread_list_options">.*?)(\s*<div class="buttonGroup">)#si]]></find>
+      <replace><![CDATA[$1
+<xen:include template="SV_WordCountSearch_thread_list" />$2]]></replace>
+    </modification>
+    <modification template="thread_list" modification_key="thread_list_word_count2" description="Add word-count filtering UI" execution_order="4763" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<div class="discussionListFilters secondaryContent">.*?)(\s*</xen:contentcheck>)#si]]></find>
+      <replace><![CDATA[$1
+<xen:include template="SV_WordCountSearch_thread_list_filters" />$2]]></replace>
     </modification>
   </public_template_modifications>
   <bb_code_media_sites/>

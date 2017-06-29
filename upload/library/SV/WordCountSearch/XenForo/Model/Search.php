@@ -15,6 +15,9 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
     {
         if(self::$hasElasticSearch === null)
         {
+            // var XenForo_Search_SourceHandler_Abstract $sourceHandler
+            $sourceHandler = XenForo_Search_SourceHandler_Abstract::getDefaultSourceHandler();
+            // check if it is a supported type
             self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
             self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
         }
@@ -25,8 +28,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
     {
         if(self::$hasElasticSearch === null)
         {
-            self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
-            self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
+            $this->hasRangeQuery();
         }
         return self::$hasElasticSearch;
     }
@@ -35,8 +37,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
     {
         if(self::$hasElasticSearch === null)
         {
-            self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
-            self::$hasMySQLSearch = class_exists('XFCP_SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt', false);
+            $this->hasRangeQuery();
         }
         if (self::$hasMySQLSearch)
         {
@@ -145,11 +146,14 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         return $constraints;
     }
 
+	/**
+	 * @return Sidane_Threadmarks_Model_Threadmarks
+	 */
     protected function _getThreadmarksModelIfThreadmarksActive()
     {
         if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
         {
-            return false;
+            return null;
         }
 
         return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');

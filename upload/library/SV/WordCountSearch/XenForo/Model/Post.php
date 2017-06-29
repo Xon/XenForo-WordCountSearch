@@ -66,9 +66,11 @@ class SV_WordCountSearch_XenForo_Model_Post extends XFCP_SV_WordCountSearch_XenF
         }
     }
 
+	/**
+	 * @return SV_WordCountSearch_XenForo_Model_Search
+	 */
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
     }
-
 }
