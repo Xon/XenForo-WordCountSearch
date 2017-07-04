@@ -27,6 +27,18 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Search extends XFCP_SV_WordCou
             /** @var SV_WordCountSearch_XenForo_Model_Search $searchModel */
             $searchModel = $this->_getSearchModel();
             $response->params['search']['range_query'] = $searchModel->hasRangeQuery();
+            if ($response->templateName == 'search_form')
+            {
+                if (!isset($response->params['sortOptions']))
+                {
+                    $response->params['sortOptions'] = array();
+                }
+                $response->params['sortOptions'][] = array('id' => 'word_count', 'phrase' => new XenForo_Phrase('word_count'));
+            }
+            if (!$response->params['search']['range_query'])
+            {
+                unset($response->params['sortOptions']);
+            }
         }
 
         return $response;

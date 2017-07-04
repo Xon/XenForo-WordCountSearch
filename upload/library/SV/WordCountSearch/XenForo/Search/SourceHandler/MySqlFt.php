@@ -174,6 +174,18 @@ class SV_WordCountSearch_XenForo_Search_SourceHandler_MySqlFt extends XFCP_SV_Wo
 
         return $processed + parent::processConstraints($constraints, $typeHandler);
     }
+
+    public function getGeneralOrderClause($order)
+    {
+        if ($order == 'word_count')
+        {
+            return array(
+                array('search_index', 'word_count', 'desc'),
+                array('search_index', 'item_date', 'desc')
+            );
+        }
+        return parent::getGeneralOrderClause($order);
+    }
 }
 
 // ******************** FOR IDE AUTO COMPLETE ********************

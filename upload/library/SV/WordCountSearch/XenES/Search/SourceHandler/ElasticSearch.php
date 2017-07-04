@@ -30,6 +30,18 @@ class SV_WordCountSearch_XenES_Search_SourceHandler_ElasticSearch extends XFCP_S
 
         return $processed + parent::processConstraints($constraints, $typeHandler);
     }
+
+    public function getGeneralOrderClause($order)
+    {
+        if ($order == 'word_count')
+        {
+            return array(
+                array('search_index', 'word_count', 'desc'),
+                array('search_index', 'item_date', 'desc')
+            );
+        }
+        return parent::getGeneralOrderClause($order);
+    }
 }
 
 // ******************** FOR IDE AUTO COMPLETE ********************
