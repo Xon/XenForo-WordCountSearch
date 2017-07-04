@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_WordCountSearch" title="Word Count Search" version_string="1.2.0rc5" version_id="1020005" url="https://xenforo.com/community/resources/word-count-search.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="SV_WordCountSearch" title="Word Count Search" version_string="1.2.0rc6" version_id="1020006" url="https://xenforo.com/community/resources/word-count-search.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -79,6 +79,25 @@
 </xen:if>
 $0]]></replace>
     </modification>
+    <modification template="search_form" modification_key="SV_WordCountSearch_search_form2" description="Sort by Word count" execution_order="1" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:if is="{$supportsRelevance}">
+		<dl class="ctrlUnit">
+			<dt><label>{xen:phrase order_by}:</label></dt>
+			<dd>
+				<ul>
+					<li><label for="ctrl_order_date"><input type="radio" name="order" id="ctrl_order_date" value="date" {xen:checked '{$search.order} == "date"'} /> {xen:phrase most_recent}</label></li>]]></find>
+      <replace><![CDATA[<xen:if is="{$supportsRelevance} || {$sortOptions}">
+		<dl class="ctrlUnit">
+			<dt><label>{xen:phrase order_by}:</label></dt>
+			<dd>
+				<ul>
+					<xen:if is="{$sortOptions}">
+					<xen:foreach loop="$sortOptions" value="$sortOption">
+						<li><label for="ctrl_order_{$sortOption.id}"><input type="radio" name="order" id="ctrl_order_{$sortOption.id}" value="{$sortOption.id}" {xen:checked '{$search.order} == {$sortOption.id}'} /> {$sortOption.phrase}</label></li>
+					</xen:foreach>
+					</xen:if>
+					<li><label for="ctrl_order_date"><input type="radio" name="order" id="ctrl_order_date" value="date" {xen:checked '{$search.order} == "date"'} /> {xen:phrase most_recent}</label></li>]]></replace>
+    </modification>
     <modification template="search_form" modification_key="SV_WordCountSearch_search_form_1" description="Inject Word count filter" execution_order="4763" enabled="1" action="preg_replace">
       <find><![CDATA[#{xen:phrase newer_than.*?</dl>#si]]></find>
       <replace><![CDATA[$0
@@ -88,6 +107,15 @@ $0]]></replace>
       <find><![CDATA[#xen:phrase newer_than.*?</dl>#si]]></find>
       <replace><![CDATA[$0
 <xen:include template="SV_WordCountSearch_search_form" />]]></replace>
+    </modification>
+    <modification template="search_form_post" modification_key="SV_WordCountSearch_search_form_post2" description="Sort by Word count" execution_order="1" enabled="1" action="str_replace">
+      <find><![CDATA[<li><label for="ctrl_order_date">]]></find>
+      <replace><![CDATA[<xen:if is="{$sortOptions}">
+				<xen:foreach loop="$sortOptions" value="$sortOption">
+					<li><label for="ctrl_order_{$sortOption.id}"><input type="radio" name="order" id="ctrl_order_{$sortOption.id}" value="{$sortOption.id}" {xen:checked '{$search.order} == {$sortOption.id}'} /> {$sortOption.phrase}</label></li>
+				</xen:foreach>
+				</xen:if>
+$0]]></replace>
     </modification>
     <modification template="search_result_post" modification_key="SV_WordCountSearch_search_result_post_1" description="Inject Word count" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#\w*{xen:phrase post_by}#si]]></find>
