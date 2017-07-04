@@ -62,18 +62,6 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
         return parent::getSearchFormControllerResponse($controller, $input, $viewParams);
     }
 
-    public function getOrderClause($order)
-    {
-        if ($order == 'word_count')
-        {
-            return array(
-                array('search_index', 'word_count', 'desc'),
-                array('search_index', 'item_date', 'desc')
-            );
-        }
-        return parent::getOrderClause($order);
-    }
-
     /**
      * @var SV_WordCountSearch_XenForo_Model_Search
      */
