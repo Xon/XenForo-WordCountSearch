@@ -19,7 +19,7 @@ class SV_WordCountSearch_Installer
         {
             throw new XenForo_Exception("Require Enhanced Search to be installed and enabled", true);
         }
-        if (SV_Utils_AddOn::addOnIsActive('SV_SearchImprovements', 1020000))
+        if (!SV_Utils_AddOn::addOnIsActive('SV_SearchImprovements', 1020000))
         {
             throw new XenForo_Exception("Enhanced Search Improvements support requires v1.2.0 or newer", true);
         }
