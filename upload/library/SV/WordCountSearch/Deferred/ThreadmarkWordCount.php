@@ -44,6 +44,8 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         $searchModel = XenForo_Model::create('XenForo_Model_Search');
         /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
         $threadModel = XenForo_Model::create('XenForo_Model_Thread');
+        /** @var SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks $threadmarkModel */
+        $threadmarkModel = SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002) ? XenForo_Model::create('Sidane_Threadmarks_Model_Threadmarks') : null;
         $min_threadmark_id = false;
 
         foreach ($threadmarks as $threadmark)
@@ -61,6 +63,10 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         foreach($threadIds as $threadId)
         {
             $threadModel->rebuildThreadWordCount($threadId);
+            if ($threadmarkModel)
+            {
+                $threadmarkModel->updateThreadmarkDataForThread($threadId);
+            }
         }
 
         $actionPhrase = new XenForo_Phrase('rebuilding');
