@@ -78,7 +78,7 @@ class SV_WordCountSearch_Installer
             $requireIndexing['thread'] = true;
         }
         
-        if (SV_Utils_AddOn::addOnIsActive('Threadmarks', 1060500))
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1060500))
         {
             XenForo_Application::defer('Sidane_Threadmarks_Deferred_Cache', array('resync' => false), null, true);
         }
