@@ -33,13 +33,11 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
             $thread = $response->params['thread'];
             $activeCategory = &$response->params['activeThreadmarkCategory'];
             $categoryId = $activeCategory['threadmark_category_id'];
-            if (isset($thread['threadmark_category_data']))
+            if (isset($thread['threadmark_category_data']) && 
+                isset($thread['threadmark_category_data'][$categoryId]) && 
+                isset($thread['threadmark_category_data'][$categoryId]['WordCount']))
             {
-                $data = $thread['threadmark_category_data'];
-                if (isset($data[$categoryId]['WordCount']))
-                {
-                    $activeCategory['WordCount'] = $data[$categoryId]['WordCount'];
-                }
+                $activeCategory['WordCount'] = $thread['threadmark_category_data'][$categoryId]['WordCount'];
             }
             else if (isset($thread['WordCount']))
             {
