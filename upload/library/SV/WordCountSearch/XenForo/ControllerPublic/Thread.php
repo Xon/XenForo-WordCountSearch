@@ -23,6 +23,32 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Thread extends XFCP_SV_WordCou
 
         return $fetchOptions;
     }
+
+    public function actionThreadmarks()
+    {
+        $response = parent::actionThreadmarks();
+
+        if ($response instanceof XenForo_ControllerResponse_View && isset($response->params['thread']))
+        {
+            $thread = $response->params['thread'];
+            $activeCategory = &$response->params['activeThreadmarkCategory'];
+            $categoryId = $activeCategory['threadmark_category_id'];
+            if (isset($thread['threadmark_category_data']))
+            {
+                $data = $thread['threadmark_category_data'];
+                if (isset($data[$categoryId]['WordCount']))
+                {
+                    $activeCategory['WordCount'] = $data[$categoryId]['WordCount'];
+                }
+            }
+            else if (isset($thread['WordCount']))
+            {
+                $activeCategory['WordCount'] = $thread['WordCount'];
+            }
+        }
+
+        return $response;
+    }
 }
 
 // ******************** FOR IDE AUTO COMPLETE ********************

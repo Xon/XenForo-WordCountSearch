@@ -147,11 +147,11 @@ $0]]></replace>
     </modification>
     <modification template="threadmarks" modification_key="SV_WordCountSearch_threadmarks_total_count" description="Adds total word count to Threadmarks index" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<div class="sectionFooter overlayOnly"><a class="button primary OverlayCloser">{xen:phrase close}</a></div>]]></find>
-      <replace><![CDATA[<div class="sectionFooter"><xen:if is="{$thread.threadmark_category_data.{$activeThreadmarkCategory.threadmark_category_id}.WordCount}">&nbsp;{xen:phrase word_count}: {$thread.threadmark_category_data.{$activeThreadmarkCategory.threadmark_category_id}.WordCount}</xen:if> <a class="button primary overlayOnly OverlayCloser">{xen:phrase close}</a></div>]]></replace>
+      <replace><![CDATA[<div class="sectionFooter"><xen:if is="{$activeThreadmarkCategory.WordCount}">&nbsp;{xen:phrase word_count}: {$activeThreadmarkCategory.WordCount}</xen:if> <a class="button primary overlayOnly OverlayCloser">{xen:phrase close}</a></div>]]></replace>
     </modification>
     <modification template="threadmarks" modification_key="SV_WordCountSearch_threadmarks_total_count2" description="Adds total word count to Threadmarks index2" execution_order="10" enabled="1" action="preg_replace">
       <find><![CDATA[#(threadmarkCategoryStats.*?<span class="statsSecondary">.*?)(</span>)#si]]></find>
-      <replace><![CDATA[$1<xen:if is="{$thread.threadmark_category_data.{$activeThreadmarkCategory.threadmark_category_id}.WordCount}">, {xen:phrase word_count}: {$thread.threadmark_category_data.{$activeThreadmarkCategory.threadmark_category_id}.WordCount}</xen:if>$2]]></replace>
+      <replace><![CDATA[$1<xen:if is="{$activeThreadmarkCategory.WordCount}">, {xen:phrase word_count}: {$activeThreadmarkCategory.WordCount}</xen:if>$2]]></replace>
     </modification>
     <modification template="thread_list" modification_key="thread_list_word_count" description="Add word-count filtering options" execution_order="4763" enabled="1" action="preg_replace">
       <find><![CDATA[#(<xen:hook name="thread_list_options">.*?)(\s*<div class="buttonGroup">)#si]]></find>
