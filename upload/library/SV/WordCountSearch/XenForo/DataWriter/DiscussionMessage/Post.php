@@ -61,7 +61,8 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         if ($this->_wordCount)
         {
             $db = $this->_db;
-            if (!$searchModel->shouldRecordPostWordCount($this->get('post_id'), $this->_wordCount))
+            $threadmark = $this->_getThreadmarkDataForWC();
+            if ($threadmark || !$searchModel->shouldRecordPostWordCount($this->get('post_id'), $this->_wordCount))
             {
                 if ($this->getExisting('word_count'))
                 {
@@ -98,19 +99,31 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                     word_count = values(word_count)
             ", array($this->get('post_id'), $this->_wordCount));
 
-            if ($threadmarksModel = $this->_getThreadmarksModelIfThreadmarksActive())
+            $threadmark = $this->_getThreadmarkDataForWC();
+            $threadmarkModel = $this->_getThreadmarksModelIfThreadmarksActive();
+            if ($threadmark && $threadmarkModel)
             {
-                if ($threadmarksModel->getByPostId($this->get('post_id')))
+                /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
+                $threadModel = $this->_getThreadModel();
+                $threadId = $this->get('thread_id');
+                $threadModel->rebuildThreadWordCount($threadId);
+                if ($this->isUpdate())
                 {
-                    /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
-                    $threadModel = $this->_getThreadModel();
-                    $threadModel->rebuildThreadWordCount($this->get('thread_id'));
-                    $this->_updateThreadSearchIndex();
+                    $threadmarkModel->updateThreadmarkDataForThread($threadId);
                 }
+                $this->_updateThreadSearchIndex();
             }
         }
 
         parent::_messagePostSave();
+    }
+    
+    protected function _getThreadmarkDataForWC()
+    {
+        if (is_callable(array($this, '_getThreadmarkData')))
+        {
+            return $this->_getThreadmarkData();
+        }
     }
 
     protected function _updateThreadSearchIndex()

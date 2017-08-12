@@ -43,11 +43,23 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
 
     public function prepareThread(array $thread, array $forum, array $nodePermissions = null, array $viewingUser = null)
     {
+        $thread = parent::prepareThread($thread, $forum, $nodePermissions, $viewingUser);
+        $searchModel = $this->_getSearchModel();
         if (isset($thread['word_count']))
         {
-            $thread['WordCount'] = $this->_getSearchModel()->roundWordCount($thread['word_count']);
+            $thread['WordCount'] = $searchModel->roundWordCount($thread['word_count']);
         }
-        return parent::prepareThread($thread, $forum, $nodePermissions, $viewingUser);
+        if (isset($thread['threadmark_category_data']))
+        {
+            foreach($thread['threadmark_category_data'] as &$category)
+            {
+                if (isset($category['word_count']))
+                {
+                    $category['WordCount'] = $searchModel->roundWordCount($category['word_count']);
+                }
+            }
+        }
+        return $thread;
     }
 
     public function prepareThreadFetchOptions(array $fetchOptions)

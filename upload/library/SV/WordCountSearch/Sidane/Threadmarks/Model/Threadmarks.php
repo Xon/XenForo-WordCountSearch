@@ -16,7 +16,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks extends XFCP_SV_Wo
             if ($fetchOptions['join'] & self::FETCH_WORD_COUNT)
             {
                 $selectFields .= ', post_words.word_count';
-                $joinTables   .= 'JOIN xf_post_words AS post_words ON
+                $joinTables   .= 'LEFT JOIN xf_post_words AS post_words ON
                     (post_words.post_id = threadmarks.post_id)';
             }
         }
@@ -35,6 +35,19 @@ class SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks extends XFCP_SV_Wo
         }
         return parent::prepareThreadmark($threadmark, $thread, $forum, $nodePermissions, $viewingUser);
     }
+
+  protected function getPerTheadmarkCategoryData($threadId)
+  {
+    return $this->fetchAllKeyed(
+      'SELECT threadmark_category_id, MAX(position) AS position, sum(COALESCE(post_words.word_count, 0)) as word_count
+        FROM threadmarks
+        LEFT JOIN xf_post_words AS post_words ON (post_words.post_id = threadmarks.post_id)
+        WHERE thread_id = ?
+        GROUP BY threadmark_category_id',
+      'threadmark_category_id',
+      $threadId
+    );
+  }
 
     protected function _getSearchModel()
     {

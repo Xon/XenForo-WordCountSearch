@@ -77,6 +77,11 @@ class SV_WordCountSearch_Installer
         {
             $requireIndexing['thread'] = true;
         }
+        
+        if (SV_Utils_AddOn::addOnIsActive('Threadmarks', 1060500))
+        {
+            XenForo_Application::defer('Sidane_Threadmarks_Deferred_Cache', array('resync' => false), null, true);
+        }
 
         // if Elastic Search is installed, determine if we need to push optimized mappings for the search types
         // requires overriding XenES_Model_Elasticsearch

@@ -53,14 +53,6 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
             return true;
         }
 
-        if ($threadmarksModel = $this->_getThreadmarksModelIfThreadmarksActive())
-        {
-            if ($threadmarksModel->getByPostId($postId))
-            {
-                return true;
-            }
-        }
-
         return false;
     }
 
