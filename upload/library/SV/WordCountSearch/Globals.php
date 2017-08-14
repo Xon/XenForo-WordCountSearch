@@ -5,7 +5,7 @@
 class SV_WordCountSearch_Globals
 {
     public static $SearchController = null;
-    public static $wordCountThreshold = 100;
+    public static $wordCountThreshold = 20;
 
     private function __construct() {}
 }
