@@ -62,13 +62,6 @@ class SV_WordCountSearch_Installer
         {
             if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
             {
-                XenForo_Application::defer(
-                    'SV_WordCountSearch_Deferred_ThreadmarkWordCount',
-                    array('position' => -1),
-                    'ThreadmarkWordCount',
-                    true
-                );
-
                 $requireIndexing['thread'] = true;
             }
         }
@@ -77,10 +70,16 @@ class SV_WordCountSearch_Installer
         {
             $requireIndexing['thread'] = true;
         }
-        
-        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1060500))
+
+        if ($version < 1030100 && SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1060500))
         {
-            XenForo_Application::defer('Sidane_Threadmarks_Deferred_Cache', array('resync' => false), null, true);
+            XenForo_Application::defer('Sidane_Threadmarks_Deferred_Cache', array('resync' => false), 'ThreadmarkCache', true);
+        }
+
+        // always try to add word-counts to threadmarks which do not have them
+        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
+        {
+            XenForo_Application::defer('SV_WordCountSearch_Deferred_ThreadmarkWordCount', array('position' => -1), 'ThreadmarkWordCount', true);
         }
 
         // if Elastic Search is installed, determine if we need to push optimized mappings for the search types

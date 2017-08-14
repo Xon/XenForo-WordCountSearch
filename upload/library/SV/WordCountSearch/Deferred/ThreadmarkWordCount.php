@@ -20,11 +20,6 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
 
         $args = array($min_threadmark_id);
         $sql = '';
-        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1050015))
-        {
-            $sql = ' AND threadmarks.threadmark_category_id = ? ';
-            $args[] = 1; // only count the 1st threadmark type, hardcode for now
-        }
 
         $threadmarks = $db->fetchAll($db->limit('
             SELECT threadmarks.threadmark_id, threadmarks.post_id, xf_post.message, xf_post.thread_id
