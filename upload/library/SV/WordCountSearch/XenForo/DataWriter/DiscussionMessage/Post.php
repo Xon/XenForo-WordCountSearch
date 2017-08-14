@@ -62,17 +62,17 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         {
             $db = $this->_db;
             $threadmark = $this->_getThreadmarkDataForWC();
-            if ($threadmark || !$searchModel->shouldRecordPostWordCount($this->get('post_id'), $this->_wordCount))
+            if ($threadmark || $searchModel->shouldRecordPostWordCount($this->get('post_id'), $this->_wordCount))
+            {
+                $this->deferredWordCountInsert = $this->isChanged('word_count');
+            }
+            else
             {
                 if ($this->getExisting('word_count'))
                 {
                     $post_id = $this->get('post_id');
                     $db->query('delete from xf_post_words where post_id = ?', array($this->get('post_id')));
                 }
-            }
-            else
-            {
-                $this->deferredWordCountInsert = true;
             }
             $this->_includeWordCount = false;
             unset($this->_fields['xf_post_words']);
@@ -98,26 +98,29 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                 on duplicate key update
                     word_count = values(word_count)
             ", array($this->get('post_id'), $this->_wordCount));
+        }
 
+        parent::_messagePostSave();
+    }
+
+    protected function _postSaveAfterTransaction()
+    {
+        parent::_postSaveAfterTransaction();
+        // the threadmark can be created on post-insert, only need to trigger a thread wordcount rebuild if the post is updated
+        if ($this->_wordCount !== null && $this->isUpdate())
+        {
             $threadmark = $this->_getThreadmarkDataForWC();
-            $threadmarkModel = $this->_getThreadmarksModelIfThreadmarksActive();
-            if ($threadmark && $threadmarkModel)
+            if ($threadmark)
             {
                 /** @var SV_WordCountSearch_XenForo_Model_Thread $threadModel */
                 $threadModel = $this->_getThreadModel();
                 $threadId = $this->get('thread_id');
                 $threadModel->rebuildThreadWordCount($threadId);
-                if ($this->isUpdate() && is_callable(array($threadmarkModel, 'updateThreadmarkDataForThread')))
-                {
-                    $threadmarkModel->updateThreadmarkDataForThread($threadId);
-                }
                 $this->_updateThreadSearchIndex();
             }
         }
-
-        parent::_messagePostSave();
     }
-    
+
     protected function _getThreadmarkDataForWC()
     {
         if (is_callable(array($this, '_getThreadmarkData')))
@@ -144,19 +147,6 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
-    }
-
-    /**
-     * @return SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks
-     */
-    protected function _getThreadmarksModelIfThreadmarksActive()
-    {
-        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
-        {
-            return null;
-        }
-
-        return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
     }
 }
 

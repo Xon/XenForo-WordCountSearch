@@ -31,12 +31,22 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
 
     public function rebuildThreadWordCount($threadId)
     {
+        XenForo_Db::beginTransaction();
+
         $wordCount = $this->countThreadmarkWordsInThread($threadId);
 
         $dw = XenForo_DataWriter::create('XenForo_DataWriter_Discussion_Thread');
         $dw->setExistingData($threadId);
         $dw->set('word_count', $wordCount);
         $dw->save();
+
+        $threadmarkModel = $this->_getThreadmarksModelIfThreadmarksActive();
+        if ($threadmarkModel && is_callable(array($threadmarkModel, 'updateThreadmarkDataForThread')))
+        {
+            $threadmarkModel->updateThreadmarkDataForThread($threadId);
+        }
+
+        XenForo_Db::commit();
 
         return $wordCount;
     }
@@ -115,6 +125,19 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
     protected function _getSearchModel()
     {
         return $this->getModelFromCache('XenForo_Model_Search');
+    }
+
+    /**
+     * @return SV_WordCountSearch_Sidane_Threadmarks_Model_Threadmarks
+     */
+    protected function _getThreadmarksModelIfThreadmarksActive()
+    {
+        if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
+        {
+            return null;
+        }
+
+        return $this->getModelFromCache('Sidane_Threadmarks_Model_Threadmarks');
     }
 }
 
