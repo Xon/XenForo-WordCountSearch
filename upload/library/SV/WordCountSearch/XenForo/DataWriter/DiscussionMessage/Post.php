@@ -107,7 +107,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                 $threadModel = $this->_getThreadModel();
                 $threadId = $this->get('thread_id');
                 $threadModel->rebuildThreadWordCount($threadId);
-                if ($this->isUpdate())
+                if ($this->isUpdate() && is_callable(array($threadmarkModel, 'updateThreadmarkDataForThread')))
                 {
                     $threadmarkModel->updateThreadmarkDataForThread($threadId);
                 }

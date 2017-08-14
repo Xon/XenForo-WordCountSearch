@@ -63,7 +63,7 @@ class SV_WordCountSearch_Deferred_ThreadmarkWordCount extends XenForo_Deferred_A
         foreach($threadIds as $threadId)
         {
             $threadModel->rebuildThreadWordCount($threadId);
-            if ($threadmarkModel)
+            if ($threadmarkModel && is_callable(array($threadmarkModel, 'updateThreadmarkDataForThread')))
             {
                 $threadmarkModel->updateThreadmarkDataForThread($threadId);
             }
