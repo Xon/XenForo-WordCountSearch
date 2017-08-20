@@ -23,6 +23,12 @@ class SV_WordCountSearch_Installer
         {
             throw new XenForo_Exception("Enhanced Search Improvements support requires v1.2.0 or newer", true);
         }
+        $threadmarksVersion = 0;
+        if (XenForo_Application::isRegistered('addOns')) 
+        {
+            $addons = XenForo_Application::get('addOns');
+            $threadmarksVersion = isset($addons['sidaneThreadmarks']) ? $addons['sidaneThreadmarks'] 0;
+        }
 
         $requireIndexing = array();
         if ($version == 0)
@@ -60,7 +66,7 @@ class SV_WordCountSearch_Installer
 
         if ($version < 1010001)
         {
-            if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
+            if ($threadmarksVersion >= 1030002)
             {
                 $requireIndexing['thread'] = true;
             }
@@ -71,13 +77,18 @@ class SV_WordCountSearch_Installer
             $requireIndexing['thread'] = true;
         }
 
-        if ($version < 1030100 && SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1060500))
+        if ($version < 1030100 && $threadmarksVersion >= 1060500)
+        {
+            XenForo_Application::defer('Sidane_Threadmarks_Deferred_Cache', array('resync' => false), 'ThreadmarkCache', true);
+        }
+
+        if ($version < 1030200 && $threadmarksVersion >= 1050200 && $threadmarksVersion < 1060000)
         {
             XenForo_Application::defer('Sidane_Threadmarks_Deferred_Cache', array('resync' => false), 'ThreadmarkCache', true);
         }
 
         // always try to add word-counts to threadmarks which do not have them
-        if (SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks', 1030002))
+        if ($threadmarksVersion >= 1030002)
         {
             XenForo_Application::defer('SV_WordCountSearch_Deferred_ThreadmarkWordCount', array('position' => -1), 'ThreadmarkWordCount', true);
         }
