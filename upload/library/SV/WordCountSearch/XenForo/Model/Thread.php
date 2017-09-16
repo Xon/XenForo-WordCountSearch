@@ -24,6 +24,30 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
         return $data;
     }
 
+    protected function filterAggregatingForumConditions(array &$conditions, array &$fetchOptions, $nodeId, array &$commonConditions)
+    {
+        if (is_callable('parent::filterAggregatingForumConditions'))
+        {
+            /** @noinspection PhpUndefinedMethodInspection */
+            parent::filterAggregatingForumConditions($conditions, $fetchOptions, $nodeId, $commonConditions);
+        }
+
+        if ($nodeId == $conditions['forum_id'])
+        {
+            if (isset($conditions['lword']))
+            {
+                $commonConditions['lword'] = $conditions['lword'];
+            }
+            if (isset($conditions['uword']))
+            {
+                $commonConditions['uword'] = $conditions['uword'];
+            }
+        }
+        // prevent aggregating forums pushing prefix conditions down
+        unset($conditions['lword']);
+        unset($conditions['uword']);
+    }
+
     public function countThreadmarkWordsInThread($threadId)
     {
         if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))
