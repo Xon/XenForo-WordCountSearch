@@ -17,6 +17,8 @@ class SV_WordCountSearch_XenForo_ControllerPublic_Forum extends XFCP_SV_WordCoun
             unset($displayConditions['uword']);
         }
 
+        SV_WordCountSearch_XenForo_Model_Thread::$displayConditions = $displayConditions;
+
         return $displayConditions;
     }
 

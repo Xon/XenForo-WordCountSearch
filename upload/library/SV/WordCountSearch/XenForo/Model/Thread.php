@@ -2,6 +2,28 @@
 
 class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_XenForo_Model_Thread
 {
+    public static $displayConditions = null;
+
+    public function getForumFilterData($data)
+    {
+        if (is_callable('parent::filterAggregatingForumConditions'))
+        {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $data = parent::getForumFilterData($data);
+        }
+
+        if (!empty(self::$displayConditions['lword']))
+        {
+            $data['lword'] = self::$displayConditions['lword'];
+        }
+        if (!empty(self::$displayConditions['uword']))
+        {
+            $data['uword'] = self::$displayConditions['uword'];
+        }
+
+        return $data;
+    }
+
     public function countThreadmarkWordsInThread($threadId)
     {
         if (!SV_Utils_AddOn::addOnIsActive('sidaneThreadmarks'))

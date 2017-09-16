@@ -71,7 +71,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
                 if ($this->getExisting('word_count'))
                 {
                     $post_id = $this->get('post_id');
-                    $db->query('delete from xf_post_words where post_id = ?', array($this->get('post_id')));
+                    $db->query('delete from xf_post_words where post_id = ?', array($post_id));
                 }
             }
             $this->_includeWordCount = false;
