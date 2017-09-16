@@ -24,10 +24,10 @@ class SV_WordCountSearch_Installer
             throw new XenForo_Exception("Enhanced Search Improvements support requires v1.2.0 or newer", true);
         }
         $threadmarksVersion = 0;
-        if (XenForo_Application::isRegistered('addOns')) 
+        if (XenForo_Application::isRegistered('addOns'))
         {
             $addons = XenForo_Application::get('addOns');
-            $threadmarksVersion = isset($addons['sidaneThreadmarks']) ? $addons['sidaneThreadmarks'] 0;
+            $threadmarksVersion = isset($addons['sidaneThreadmarks']) ? $addons['sidaneThreadmarks'] : 0;
         }
 
         $requireIndexing = array();
