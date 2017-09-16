@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="SV_WordCountSearch" title="Word Count Search" version_string="1.3.3" version_id="1030300" url="https://xenforo.com/community/resources/word-count-search.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="SV_WordCountSearch" title="Word Count Search" version_string="1.4.0" version_id="1040000" url="https://xenforo.com/community/resources/word-count-search.4763/" install_callback_class="SV_WordCountSearch_Installer" install_callback_method="install" uninstall_callback_class="SV_WordCountSearch_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -46,14 +46,14 @@
 <dl class="ctrlUnit">
 		<dt><label for="ctrl_word_count_lower">{xen:phrase word_count}:</label></dt>
 		<dd>
-			<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="word_count[lower]" value="{$search.word_count.lower}" class="textCtrl" id="ctrl_word_count_lower" /> - 
+			<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="word_count[lower]" value="{$search.word_count.lower}" class="textCtrl" id="ctrl_word_count_lower" /> -
 			<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="word_count[upper]" value="{$search.word_count.upper}" class="textCtrl" id="ctrl_word_count_upper" />
 		</dd>
 	</dl>
 </xen:if>]]></template>
     <template title="SV_WordCountSearch_thread_list" version_id="1020000" version_string="1.2.0"><![CDATA[<div class="controlGroup">
 	<label for="ctrl_word_count_lower">{xen:phrase word_count}:
-	<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="lword" value="{$displayConditions.lword}" class="textCtrl" id="ctrl_word_count_lower" /> - 
+	<input type="number" placeholder="{xen:phrase word_count_lower_bound}" name="lword" value="{$displayConditions.lword}" class="textCtrl" id="ctrl_word_count_lower" /> -
 	<input type="number" placeholder="{xen:phrase word_count_upper_bound}" name="uword" value="{$displayConditions.uword}" class="textCtrl" id="ctrl_word_count_upper" />
 </div>]]></template>
     <template title="SV_WordCountSearch_thread_list_filters" version_id="1020000" version_string="1.2.0"><![CDATA[<xen:if is="{$displayConditions.lword} || {$displayConditions.uword}">
