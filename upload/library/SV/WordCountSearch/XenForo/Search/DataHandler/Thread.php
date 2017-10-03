@@ -48,13 +48,6 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
         parent::_insertIntoIndex($indexer, $data, $parentData);
     }
 
-    public function quickIndex(XenForo_Search_Indexer $indexer, array $contentIds)
-    {
-        $indexer = new SV_SearchImprovements_Search_IndexerProxy($indexer, array());
-
-        return parent::quickIndex($indexer, $contentIds);
-    }
-
     /**
      * @var SV_WordCountSearch_XenForo_Model_Search
      */

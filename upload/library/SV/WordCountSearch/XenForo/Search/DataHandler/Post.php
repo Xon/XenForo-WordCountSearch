@@ -46,12 +46,6 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
         parent::_insertIntoIndex($indexer, $data, $parentData);
     }
 
-    public function quickIndex(XenForo_Search_Indexer $indexer, array $contentIds)
-    {
-        $indexer = new SV_SearchImprovements_Search_IndexerProxy($indexer, array());
-        return parent::quickIndex($indexer, $contentIds);
-    }
-
     public function getSearchFormControllerResponse(XenForo_ControllerPublic_Abstract $controller, XenForo_Input $input, array $viewParams)
     {
         if (!isset($viewParams['sortOptions']))
