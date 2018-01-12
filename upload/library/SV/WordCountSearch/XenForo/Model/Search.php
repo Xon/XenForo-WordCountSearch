@@ -63,26 +63,49 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
 
     public function roundWordCount($WordCount)
     {
-        $ApproximateWordCount = intval($WordCount);
-        if (!$ApproximateWordCount)
+        $inexactWordCount = intval($WordCount);
+        if (!$inexactWordCount)
         {
             return 0;
         }
-        if ($ApproximateWordCount > 1000000)
-            $ApproximateWordCount = round($ApproximateWordCount / 1000000, 1) . 'm';
-        else if ($ApproximateWordCount > 100000)
-            $ApproximateWordCount = round($ApproximateWordCount / 100000, 1) * 100 . 'k';
-        else if ($ApproximateWordCount > 10000)
-            $ApproximateWordCount = round($ApproximateWordCount / 10000, 1) * 10 . 'k';
-        else if ($ApproximateWordCount > 1000)
-            $ApproximateWordCount = round($ApproximateWordCount / 1000, 1) . 'k';
-        else if ($ApproximateWordCount > 100)
-            $ApproximateWordCount = round($ApproximateWordCount / 100, 1) * 100;
-        else if ($ApproximateWordCount > 10)
-            $ApproximateWordCount = round($ApproximateWordCount / 10, 1) * 10;
+        if ($inexactWordCount >= 1000000000)
+        {
+            $inexactWordCount = round($inexactWordCount / 1000000000, 1) . 'b';
+        }
+        else if ($inexactWordCount >= 1000000)
+        {
+            $inexactWordCount = round($inexactWordCount / 1000000, 1) . 'm';
+        }
+        else if ($inexactWordCount >= 100000)
+        {
+            $inexactWordCount = round($inexactWordCount / 100000, 1) * 100 . 'k';
+        }
+        else if ($inexactWordCount >= 10000)
+        {
+            $inexactWordCount = round($inexactWordCount / 10000, 1) * 10 . 'k';
+        }
+        else if ($inexactWordCount >= 1000)
+        {
+            $inexactWordCount = round($inexactWordCount / 1000, 1) . 'k';
+        }
+        else if ($inexactWordCount >= 100)
+        {
+            $inexactWordCount = round($inexactWordCount / 100, 1) * 100;
+        }
+        else if ($inexactWordCount >= 10)
+        {
+            $inexactWordCount = round($inexactWordCount / 10, 1) * 10;
+        }
+        else if ($inexactWordCount < 0)
+        {
+            $inexactWordCount = 0;
+        }
         else
-            $ApproximateWordCount = 10;
-        return $ApproximateWordCount;
+        {
+            $inexactWordCount = 10;
+        }
+
+        return strval($inexactWordCount);
     }
 
     /**
