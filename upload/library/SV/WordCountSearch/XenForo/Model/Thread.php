@@ -105,7 +105,7 @@ class SV_WordCountSearch_XenForo_Model_Thread extends XFCP_SV_WordCountSearch_Xe
         {
             $thread['WordCount'] = $searchModel->roundWordCount($thread['word_count']);
         }
-        if (isset($thread['threadmark_category_data']))
+        if (isset($thread['threadmark_category_data']) && is_array($thread['threadmark_category_data']))
         {
             foreach($thread['threadmark_category_data'] as &$category)
             {
