@@ -6,6 +6,7 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
     {
         if (is_callable('parent::getCustomMapping'))
         {
+            /** @noinspection PhpUndefinedMethodInspection */
             $mapping = parent::getCustomMapping($mapping);
         }
         $mapping['properties']['word_count'] = array("type" => "long");
@@ -60,8 +61,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Post extends XFCP_SV_WordCou
      * @var SV_WordCountSearch_XenForo_Model_Search
      */
     protected $_searchModel = null;
+
     /**
      * @return SV_WordCountSearch_XenForo_Model_Search
+     * @throws XenForo_Exception
      */
     protected function _getSearchModel()
     {

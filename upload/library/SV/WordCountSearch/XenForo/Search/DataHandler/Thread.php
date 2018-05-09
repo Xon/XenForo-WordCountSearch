@@ -52,8 +52,10 @@ class SV_WordCountSearch_XenForo_Search_DataHandler_Thread extends XFCP_SV_WordC
      * @var SV_WordCountSearch_XenForo_Model_Search
      */
     protected $_searchModel = null;
+
     /**
      * @return SV_WordCountSearch_XenForo_Model_Search
+     * @throws XenForo_Exception
      */
     protected function _getSearchModel()
     {

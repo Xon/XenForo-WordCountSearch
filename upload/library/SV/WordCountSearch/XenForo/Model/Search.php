@@ -16,6 +16,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         if(self::$hasElasticSearch === null)
         {
             // var XenForo_Search_SourceHandler_Abstract $sourceHandler
+            /** @noinspection PhpUnusedLocalVariableInspection */
             $sourceHandler = XenForo_Search_SourceHandler_Abstract::getDefaultSourceHandler();
             // check if it is a supported type
             self::$hasElasticSearch = class_exists('XFCP_SV_SearchImprovements_XenES_Search_SourceHandler_ElasticSearch', false);
@@ -46,7 +47,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         return SV_WordCountSearch_Globals::$wordCountThreshold;
     }
 
-    public function shouldRecordPostWordCount($postId, $wordCount)
+    public function shouldRecordPostWordCount(/** @noinspection PhpUnusedParameterInspection */ $postId, $wordCount)
     {
         if ($wordCount >= $this->getWordCountThreshold())
         {
@@ -119,6 +120,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
         }
         if (!empty(SV_SearchImprovements_Globals::$SearchController))
         {
+            /** @noinspection PhpIncompatibleReturnTypeInspection */
             return SV_SearchImprovements_Globals::$SearchController;
         }
         return null;
@@ -165,7 +167,7 @@ class SV_WordCountSearch_XenForo_Model_Search extends XFCP_SV_WordCountSearch_Xe
     }
 
 	/**
-	 * @return Sidane_Threadmarks_Model_Threadmarks
+	 * @return Sidane_Threadmarks_Model_Threadmarks|XenForo_Model
 	 */
     protected function _getThreadmarksModelIfThreadmarksActive()
     {

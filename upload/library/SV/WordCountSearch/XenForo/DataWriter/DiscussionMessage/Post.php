@@ -121,12 +121,17 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
         }
     }
 
+    /**
+     * @return null|array
+     */
     protected function _getThreadmarkDataForWC()
     {
         if (is_callable(array($this, '_getThreadmarkData')))
         {
+            /** @noinspection PhpUndefinedMethodInspection */
             return $this->_getThreadmarkData();
         }
+        return null;
     }
 
     protected function _updateThreadSearchIndex()
@@ -142,7 +147,7 @@ class SV_WordCountSearch_XenForo_DataWriter_DiscussionMessage_Post extends XFCP_
     }
 
     /**
-     * @return SV_WordCountSearch_XenForo_Model_Search
+     * @return SV_WordCountSearch_XenForo_Model_Search|XenForo_Model
      */
     protected function _getSearchModel()
     {

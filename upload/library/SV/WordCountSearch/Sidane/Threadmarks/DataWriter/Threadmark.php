@@ -96,7 +96,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
     }
 
     /**
-     * @return SV_WordCountSearch_XenForo_Model_Post
+     * @return SV_WordCountSearch_XenForo_Model_Post|XenForo_Model
      */
     protected function _getPostModel()
     {
@@ -104,7 +104,7 @@ class SV_WordCountSearch_Sidane_Threadmarks_DataWriter_Threadmark extends XFCP_S
     }
 
     /**
-     * @return SV_WordCountSearch_XenForo_Model_Search
+     * @return SV_WordCountSearch_XenForo_Model_Search|XenForo_Model
      */
     protected function _getSearchModel()
     {
